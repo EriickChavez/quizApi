@@ -26,3 +26,31 @@ export const sendResponse = (
 
   res.status(statusCode).json(response);
 };
+
+interface PaginatedApiResponse extends ApiResponse {
+  page: number;
+  limit: number;
+  total: number;
+}
+
+export const sendPaginatedResponse = (
+  res: Response,
+  statusCode: number,
+  message: string,
+  data: any,
+  page: number,
+  limit: number,
+  total: number
+) => {
+  const response: PaginatedApiResponse = {
+    success: statusCode >= 200 && statusCode < 300,
+    message,
+    data,
+    page,
+    limit,
+    total,
+    error: null,
+  };
+
+  res.status(statusCode).json(response);
+};
