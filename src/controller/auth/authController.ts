@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { authServiceInstance } from "../../services/auth/authServiceInstance";
 import { sendResponse } from "../../utils/apiResponse";
 import logger from "../../config/logger";
+import { ERROR_CODES } from "../../enums/error";
 
 export const signup = async (req: Request, res: Response) => {
   try {
@@ -11,7 +12,7 @@ export const signup = async (req: Request, res: Response) => {
   } catch (error: any) {
     logger.error(error.message);
     sendResponse(res, 400, error.message, null, {
-      code: "AUTH_001",
+      code: ERROR_CODES.VALIDATION_ERROR,
       details: error.message,
     });
   }
@@ -25,7 +26,7 @@ export const login = async (req: Request, res: Response) => {
   } catch (error: any) {
     logger.error(error.message);
     sendResponse(res, 400, error.message, null, {
-      code: "AUTH_002",
+      code: ERROR_CODES.INVALID_CREDENTIALS,
       details: error.message,
     });
   }
@@ -39,7 +40,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   } catch (error: any) {
     logger.error(error.message);
     sendResponse(res, 400, error.message, null, {
-      code: "AUTH_003",
+      code: ERROR_CODES.INVALID_CREDENTIALS,
       details: error.message,
     });
   }
@@ -53,7 +54,7 @@ export const resetPassword = async (req: Request, res: Response) => {
   } catch (error: any) {
     logger.error(error.message);
     sendResponse(res, 400, error.message, null, {
-      code: "AUTH_004",
+      code: ERROR_CODES.INVALID_RESET_TOKEN,
       details: error.message,
     });
   }
