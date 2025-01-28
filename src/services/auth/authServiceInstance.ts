@@ -5,4 +5,4 @@ import { AuthService } from "./authService";
 const userRepository = new UserRepository();
 
 // Crear una instancia de AuthService con el repositorio inyectado
-export const authService = new AuthService(userRepository);
+export const authServiceInstance = new AuthService(userRepository);
