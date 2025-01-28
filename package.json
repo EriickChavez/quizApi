@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A robust Express API with TypeScript, MongoDB, and MySQL support",
   "main": "dist/server.js",
+  "license": "MIT",
   "scripts": {
     "start": "node dist/server.js",
     "build": "tsc",
@@ -16,6 +17,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.5.0",
     "helmet": "^8.0.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.0",

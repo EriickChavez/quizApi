@@ -1,6 +1,6 @@
 import app from "./app";
 import { connectMySQL } from "./config/db";
-import logger from "./config/logger";
+import logger from "./middleware/logger";
 
 const PORT = process.env.PORT || 3000;
 

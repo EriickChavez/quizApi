@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { authServiceInstance } from "../../services/auth/authServiceInstance";
 import { sendResponse } from "../../utils/apiResponse";
-import logger from "../../config/logger";
+import logger from "../../middleware/logger";
 import { ERROR_CODES } from "../../enums/error";
 
 export const signup = async (req: Request, res: Response) => {

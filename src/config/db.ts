@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import mysql from "mysql2/promise";
-import logger from "./logger";
+import logger from "../middleware/logger";
 
 // MongoDB Connection
 export const connectMongoDB = async () => {
