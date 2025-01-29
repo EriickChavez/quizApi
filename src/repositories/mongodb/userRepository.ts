@@ -1,9 +1,9 @@
-import { User } from "../models/userModel";
+import { User } from "../../models/userModel";
 import {
   IUserRepository,
   IUser,
   IUserDocument,
-} from "./interfaces/IUserRepository";
+} from "../interfaces/IUserRepository";
 
 export class UserRepository implements IUserRepository {
   async createUser(user: IUser): Promise<IUserDocument> {

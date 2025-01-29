@@ -27,7 +27,7 @@ export const sendResponse = (
   res.status(statusCode).json(response);
 };
 
-interface PaginatedApiResponse extends ApiResponse {
+export interface PaginatedApiResponse extends ApiResponse {
   page: number;
   limit: number;
   total: number;
@@ -54,3 +54,8 @@ export const sendPaginatedResponse = (
 
   res.status(statusCode).json(response);
 };
+
+export interface PaginationOptions {
+  page: number;
+  limit: number;
+}

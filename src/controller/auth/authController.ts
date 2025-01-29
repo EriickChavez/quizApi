@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { authServiceInstance } from "../../services/auth/authServiceInstance";
+import { authServiceInstance } from "../../services/instances/authServiceInstance";
 import { sendResponse } from "../../utils/apiResponse";
 import logger from "../../middleware/logger";
 import { ERROR_CODES } from "../../enums/error";

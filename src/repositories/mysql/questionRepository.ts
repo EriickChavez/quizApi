@@ -1,0 +1,53 @@
+import mysql from "mysql2/promise";
+import {
+  IQuestion,
+  IQuestionDocument,
+  IQuestionRepository,
+} from "../interfaces/IQuestionRepository";
+import {
+  PaginationOptions,
+  PaginatedApiResponse,
+} from "../../utils/apiResponse";
+
+export class MysqlQuestionRepository implements IQuestionRepository {
+  private connection: mysql.Connection;
+
+  constructor(connection: mysql.Connection) {
+    this.connection = connection;
+  }
+
+  async createQuestion(question: IQuestion): Promise<any> {
+    const [result] = await this.connection.query("", []);
+    return result;
+  }
+
+  async findQuestionById(id: string): Promise<any> {
+    const [result] = await this.connection.query("", []);
+    return result;
+  }
+  async updateQuestionById(
+    id: string,
+    updates: Partial<IQuestion>
+  ): Promise<any> {
+    const [result] = await this.connection.query("", []);
+    return result;
+  }
+  async getQuestions(
+    paginationOptions: PaginationOptions
+  ): Promise<
+    Omit<PaginatedApiResponse, "res" | "message" | "success" | "error">
+  > {
+    const [result] = await this.connection.query("", []);
+    return {
+      data: result,
+      // @ts-ignore
+      total: result.length,
+      page: paginationOptions.page,
+      limit: paginationOptions.limit,
+    };
+  }
+  async deleteQuestionById(id: string): Promise<boolean> {
+    const [result] = await this.connection.query("", []);
+    return true;
+  }
+}

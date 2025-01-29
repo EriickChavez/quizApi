@@ -1,5 +1,5 @@
 import mysql from "mysql2/promise";
-import { IUserRepository, IUser } from "./interfaces/IUserRepository";
+import { IUser, IUserRepository } from "../interfaces/IUserRepository";
 
 export class MysqlUserRepository implements IUserRepository {
   private connection: mysql.Connection;
