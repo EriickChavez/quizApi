@@ -45,11 +45,12 @@ export class QuestionService {
 
   async getQuestionsByCategory(
     paginationOptions: PaginationOptions,
-    category: string
+    categoryId: string
   ) {
+    console.log({ paginationOptions, categoryId });
     const questions = await this.questionRepository.getQuestionsByCategory(
       paginationOptions,
-      category
+      categoryId
     );
     return questions;
   }

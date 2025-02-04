@@ -6,7 +6,7 @@ import {
   getQuestions,
   getQuestionsByCategory,
   updateQuestion,
-} from "../controller/auth/questionController";
+} from "../controller/question/questionController";
 
 const router = Router();
 

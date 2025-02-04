@@ -108,9 +108,10 @@ export const getQuestionsByCategory = async (req: Request, res: Response) => {
           ? parseInt(req.query.limit)
           : PAGINATED_QUIZ_LIMIT,
     };
+    console.log(req.params);
     const questions = await questionServiceInstance.getQuestionsByCategory(
       paginationOptions,
-      req.params.category
+      req.params.id
     );
     sendResponse(res, 200, "Questions retrieved successfully", questions);
   } catch (error: any) {

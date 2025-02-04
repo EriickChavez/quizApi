@@ -4,6 +4,7 @@ import {
   PaginationOptions,
 } from "../../utils/apiResponse";
 import { QUESTION_TYPES, QUESTION_DIFFICULTY } from "../../enums/questions";
+import { ICategory } from "./ICategoryRepository";
 
 export interface IQuiz {
   id?: string;
@@ -17,11 +18,6 @@ export interface IQuestion {
   type: QUESTION_TYPES;
 }
 
-export interface ICategory {
-  id: string;
-  name: string;
-  icon?: string;
-}
 export interface IAnswer {
   answer: string;
   isCorrect: boolean;
