@@ -3,25 +3,44 @@ import {
   PaginatedApiResponse,
   PaginationOptions,
 } from "../../utils/apiResponse";
+import { QUESTION_TYPES, QUESTION_DIFFICULTY } from "../../enums/questions";
 
+export interface IQuiz {
+  id?: string;
+  category: ICategory[];
+  question: IQuestion;
+  answers: IAnswer[];
+  options: IOptions;
+}
 export interface IQuestion {
   question: string;
-  options: IOption[];
+  type: QUESTION_TYPES;
 }
 
-export interface IOption {
-  option: string;
+export interface ICategory {
+  id: string;
+  name: string;
+  icon?: string;
+}
+export interface IAnswer {
+  answer: string;
   isCorrect: boolean;
+  type: QUESTION_TYPES;
 }
 
-export interface IQuestionDocument extends IQuestion, Document {}
+export interface IOptions {
+  dificulty: QUESTION_DIFFICULTY;
+  type: QUESTION_TYPES;
+}
+
+export interface IQuestionDocument extends IQuiz, Document {}
 
 export interface IQuestionRepository {
-  createQuestion(question: IQuestion): Promise<IQuestionDocument>;
+  createQuestion(question: IQuiz): Promise<IQuestionDocument>;
   findQuestionById(id: string): Promise<IQuestionDocument | null>;
   updateQuestionById(
     id: string,
-    updates: Partial<IQuestion>
+    updates: Partial<IQuiz>
   ): Promise<IQuestionDocument | null>;
   getQuestions(
     paginationOptions: PaginationOptions
@@ -29,4 +48,8 @@ export interface IQuestionRepository {
     Omit<PaginatedApiResponse, "res" | "message" | "success" | "error">
   >;
   deleteQuestionById(id: string): Promise<boolean | null>;
+  getQuestionsByCategory(
+    paginationOptions: PaginationOptions,
+    category: string
+  ): Promise<IQuestionDocument[]>;
 }

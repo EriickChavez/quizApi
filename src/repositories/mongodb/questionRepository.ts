@@ -5,21 +5,26 @@ import {
 } from "../../utils/apiResponse";
 import {
   IQuestionRepository,
-  IQuestion,
+  IQuiz,
   IQuestionDocument,
 } from "../interfaces/IQuestionRepository";
 
 export class QuestionRepository implements IQuestionRepository {
-  createQuestion(question: IQuestion): Promise<IQuestionDocument> {
+  createQuestion(question: IQuiz): Promise<IQuestionDocument> {
     const newQuestion = new Question(question);
-    return newQuestion.save();
+    return newQuestion.save((err, doc) => {
+      if (err) {
+        throw new Error("Error saving question");
+      }
+      return doc;
+    });
   }
   findQuestionById(id: string): Promise<IQuestionDocument | null> {
     return Question.findById(id);
   }
   updateQuestionById(
     id: string,
-    updates: Partial<IQuestion>
+    updates: Partial<IQuiz>
   ): Promise<IQuestionDocument | null> {
     return Question.findByIdAndUpdate(id, updates, { new: true });
   }
@@ -36,5 +41,13 @@ export class QuestionRepository implements IQuestionRepository {
   }
   deleteQuestionById(id: string): Promise<boolean | null> {
     return Question.findByIdAndDelete(id);
+  }
+  getQuestionsByCategory(
+    paginationOptions: PaginationOptions,
+    category: string
+  ): Promise<IQuestionDocument[]> {
+    const { page, limit } = paginationOptions;
+    const skip = (page - 1) * limit;
+    return Question.find({ category }).skip(skip).limit(limit).exec();
   }
 }

@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
 import {
-  IQuestion,
+  IQuiz,
   IQuestionDocument,
   IQuestionRepository,
 } from "../interfaces/IQuestionRepository";
@@ -16,7 +16,7 @@ export class MysqlQuestionRepository implements IQuestionRepository {
     this.connection = connection;
   }
 
-  async createQuestion(question: IQuestion): Promise<any> {
+  async createQuestion(question: IQuiz): Promise<any> {
     const [result] = await this.connection.query("", []);
     return result;
   }
@@ -25,10 +25,7 @@ export class MysqlQuestionRepository implements IQuestionRepository {
     const [result] = await this.connection.query("", []);
     return result;
   }
-  async updateQuestionById(
-    id: string,
-    updates: Partial<IQuestion>
-  ): Promise<any> {
+  async updateQuestionById(id: string, updates: Partial<IQuiz>): Promise<any> {
     const [result] = await this.connection.query("", []);
     return result;
   }
@@ -49,5 +46,12 @@ export class MysqlQuestionRepository implements IQuestionRepository {
   async deleteQuestionById(id: string): Promise<boolean> {
     const [result] = await this.connection.query("", []);
     return true;
+  }
+  async getQuestionsByCategory(
+    paginationOptions: PaginationOptions,
+    category: string
+  ): Promise<IQuestionDocument[]> {
+    const [result] = await this.connection.query("", []);
+    return result as IQuestionDocument[];
   }
 }

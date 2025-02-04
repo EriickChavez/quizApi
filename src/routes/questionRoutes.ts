@@ -4,6 +4,7 @@ import {
   deleteQuestion,
   getQuestionById,
   getQuestions,
+  getQuestionsByCategory,
   updateQuestion,
 } from "../controller/auth/questionController";
 
@@ -17,6 +18,7 @@ const questionRoutes = (app: Router) => {
   router.put("/update", updateQuestion);
   router.delete("/delete", deleteQuestion);
   router.get("/get/:id", getQuestionById);
+  router.get("/get/category/:id", getQuestionsByCategory);
 };
 
 export default questionRoutes;

@@ -1,5 +1,5 @@
 import {
-  IQuestion,
+  IQuiz,
   IQuestionRepository,
 } from "../../repositories/interfaces/IQuestionRepository";
 import { PaginationOptions } from "../../utils/apiResponse";
@@ -11,7 +11,7 @@ export class QuestionService {
     this.questionRepository = questionRepository;
   }
 
-  async createQuestion(question: IQuestion) {
+  async createQuestion(question: IQuiz) {
     const newQuestion = await this.questionRepository.createQuestion(question);
     return newQuestion;
   }
@@ -28,7 +28,7 @@ export class QuestionService {
     return question;
   }
 
-  async updateQuestion(id: string, question: IQuestion) {
+  async updateQuestion(id: string, question: IQuiz) {
     const updatedQuestion = await this.questionRepository.updateQuestionById(
       id,
       question
@@ -41,5 +41,16 @@ export class QuestionService {
       id
     );
     return deletedQuestion;
+  }
+
+  async getQuestionsByCategory(
+    paginationOptions: PaginationOptions,
+    category: string
+  ) {
+    const questions = await this.questionRepository.getQuestionsByCategory(
+      paginationOptions,
+      category
+    );
+    return questions;
   }
 }

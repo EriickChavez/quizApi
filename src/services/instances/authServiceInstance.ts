@@ -1,4 +1,4 @@
-import { UserRepository } from "../../repositories/mongodb/userRepository";
+import { LocalUserRepository as UserRepository } from "../../repositories/localRepository";
 import { AuthService } from "../auth/authService";
 
 // Crear una instancia del repositorio

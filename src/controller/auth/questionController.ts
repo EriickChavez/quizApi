@@ -95,3 +95,28 @@ export const deleteQuestion = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getQuestionsByCategory = async (req: Request, res: Response) => {
+  try {
+    const paginationOptions: PaginationOptions = {
+      page:
+        typeof req.query.page === "string"
+          ? parseInt(req.query.page)
+          : PAGINATED_QUIZ_PAGE,
+      limit:
+        typeof req.query.limit === "string"
+          ? parseInt(req.query.limit)
+          : PAGINATED_QUIZ_LIMIT,
+    };
+    const questions = await questionServiceInstance.getQuestionsByCategory(
+      paginationOptions,
+      req.params.category
+    );
+    sendResponse(res, 200, "Questions retrieved successfully", questions);
+  } catch (error: any) {
+    sendResponse(res, 400, error.message, null, {
+      code: "AUTH_006",
+      details: error.message,
+    });
+  }
+};
