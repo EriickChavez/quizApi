@@ -7,7 +7,7 @@ import { QUESTION_TYPES, QUESTION_DIFFICULTY } from "../../enums/questions";
 import { ICategory } from "./ICategoryRepository";
 
 export interface IQuiz {
-  id?: string;
+  id: string;
   category: ICategory[];
   question: IQuestion;
   answers: IAnswer[];
@@ -29,10 +29,12 @@ export interface IOptions {
   type: QUESTION_TYPES;
 }
 
+// @ts-ignore
 export interface IQuestionDocument extends IQuiz, Document {}
 
 export interface IQuestionRepository {
   createQuestion(question: IQuiz): Promise<IQuestionDocument>;
+  createMultiQuestion(questions: IQuiz[]): Promise<IQuestionDocument[]>;
   findQuestionById(id: string): Promise<IQuestionDocument | null>;
   updateQuestionById(
     id: string,

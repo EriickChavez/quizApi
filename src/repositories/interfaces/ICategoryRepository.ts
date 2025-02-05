@@ -10,10 +10,11 @@ export interface ICategory {
   icon?: string;
 }
 
-export interface ICategoryDocument extends Document {}
+// @ts-ignore
+export interface ICategoryDocument extends ICategory, Document {}
 
 export interface ICategoryRepository {
-  createCategory(category: ICategory): Promise<ICategoryDocument>;
+  createCategory(category: Omit<ICategory, "id">): Promise<ICategoryDocument>;
   updateCategory(
     id: string,
     updates: Partial<ICategory>
@@ -24,4 +25,7 @@ export interface ICategoryRepository {
     Omit<PaginatedApiResponse, "res" | "message" | "success" | "error">
   >;
   deleteCategory(id: string): Promise<boolean | null>;
+  createMultiCategory(
+    categories: Omit<ICategory, "id">[]
+  ): Promise<ICategoryDocument[] | null>;
 }

@@ -81,3 +81,21 @@ export const deleteCategory = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const createMultiCategory = async (req: Request, res: Response) => {
+  try {
+    const createMultiCategory =
+      await categoryServiceInstance.createMultiCategory(req.body);
+    sendResponse(
+      res,
+      200,
+      "Category created successfully",
+      createMultiCategory
+    );
+  } catch (err: any) {
+    sendResponse(res, 500, err.message, null, {
+      code: "AUTH_005",
+      details: err.message,
+    });
+  }
+};

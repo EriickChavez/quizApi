@@ -5,6 +5,7 @@ import {
   generateToken,
   hashPassword,
 } from "../../config/auth";
+import { v4 as uuidv4 } from "uuid";
 
 export class AuthService {
   private userRepository: IUserRepository;
@@ -16,6 +17,7 @@ export class AuthService {
   async signup(email: string, password: string) {
     const hashedPassword = await hashPassword(password);
     const user = await this.userRepository.createUser({
+      id: uuidv4(),
       email,
       password: hashedPassword,
     });

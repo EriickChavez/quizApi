@@ -21,6 +21,19 @@ export const createQuestion = async (req: Request, res: Response) => {
     });
   }
 };
+export const createMultiQuestion = async (req: Request, res: Response) => {
+  try {
+    const questions = await questionServiceInstance.createMultiQuestion(
+      req.body
+    );
+    sendResponse(res, 201, "Questions created successfully", questions);
+  } catch (error: any) {
+    sendResponse(res, 400, error.message, null, {
+      code: "AUTH_001",
+      details: error.message,
+    });
+  }
+};
 
 export const getQuestions = async (req: Request, res: Response) => {
   try {

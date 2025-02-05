@@ -6,13 +6,27 @@ import {
   IQuestionDocument,
   IQuestionRepository,
 } from "./interfaces/IQuestionRepository";
+import { v4 as uuidv4 } from "uuid";
 
 export class LocalQuestionRepository implements IQuestionRepository {
   private questions: IQuiz[] = IQUIZZES;
 
-  createQuestion(question: IQuiz): Promise<IQuestionDocument> {
-    this.questions.push(question);
-    return Promise.resolve(question as IQuestionDocument);
+  createQuestion(question: Omit<IQuiz, "id">): Promise<IQuestionDocument> {
+    this.questions.push({
+      id: uuidv4(),
+      ...question,
+    });
+    return Promise.resolve(question as unknown as IQuestionDocument);
+  }
+  createMultiQuestion(
+    questions: Omit<IQuiz, "id">[]
+  ): Promise<IQuestionDocument[]> {
+    const newQuestions = questions.map((question) => ({
+      id: uuidv4(),
+      ...question,
+    }));
+    this.questions.push(...newQuestions);
+    return Promise.resolve(newQuestions as unknown as IQuestionDocument[]);
   }
   findQuestionById(id: string): Promise<IQuestionDocument | null> {
     const question = this.questions.find((q) => q.id === id) || null;

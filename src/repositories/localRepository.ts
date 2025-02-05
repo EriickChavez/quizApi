@@ -1,10 +1,14 @@
 import { IUser, IUserRepository } from "./interfaces/IUserRepository";
+import { v4 as uuidv4 } from "uuid";
 
 export class LocalUserRepository implements IUserRepository {
   private users: IUser[] = [];
 
-  async createUser(user: IUser): Promise<any> {
-    this.users.push(user);
+  async createUser(user: Omit<IUser, "id">): Promise<any> {
+    this.users.push({
+      id: uuidv4(),
+      ...user,
+    });
     return user;
   }
 

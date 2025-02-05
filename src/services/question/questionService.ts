@@ -16,6 +16,13 @@ export class QuestionService {
     return newQuestion;
   }
 
+  async createMultiQuestion(questions: IQuiz[]) {
+    const newQuestions = await this.questionRepository.createMultiQuestion(
+      questions
+    );
+    return newQuestions;
+  }
+
   async getQuestions(paginationOptions: PaginationOptions) {
     const questions = await this.questionRepository.getQuestions(
       paginationOptions

@@ -4,12 +4,16 @@ import {
   ICategoryDocument,
   ICategoryRepository,
 } from "./interfaces/ICategoryRepository";
+import { v4 as uuidv4 } from "uuid";
 
 export class LocalCategoryRepository implements ICategoryRepository {
   private category: ICategory[] = [];
 
-  createCategory(category: ICategory): Promise<ICategoryDocument> {
-    this.category.push(category);
+  createCategory(category: Omit<ICategory, "id">): Promise<ICategoryDocument> {
+    this.category.push({
+      id: uuidv4(),
+      ...category,
+    });
     return Promise.resolve(category as unknown as ICategoryDocument);
   }
   updateCategory(
@@ -48,5 +52,16 @@ export class LocalCategoryRepository implements ICategoryRepository {
     }
     this.category.splice(index, 1);
     return Promise.resolve(true);
+  }
+
+  createMultiCategory(
+    categories: Omit<ICategory, "id">[]
+  ): Promise<ICategoryDocument[] | null> {
+    const newCategories = categories.map((category) => ({
+      id: uuidv4(),
+      ...category,
+    }));
+    this.category.push(...newCategories);
+    return Promise.resolve(newCategories as unknown as ICategoryDocument[]);
   }
 }

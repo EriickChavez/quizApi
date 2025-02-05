@@ -35,4 +35,11 @@ export class CategoryService {
     const deletedCategory = await this.categoryRepository.deleteCategory(id);
     return deletedCategory;
   }
+
+  async createMultiCategory(categories: Omit<ICategory, "id">[]) {
+    const newCategories = await this.categoryRepository.createMultiCategory(
+      categories
+    );
+    return newCategories;
+  }
 }

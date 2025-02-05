@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  createMultiQuestion,
   createQuestion,
   deleteQuestion,
   getQuestionById,
@@ -14,6 +15,7 @@ const questionRoutes = (app: Router) => {
   app.use("/question", router);
 
   router.post("/create", createQuestion);
+  router.post("/createMulti", createMultiQuestion);
   router.get("/get", getQuestions);
   router.put("/update", updateQuestion);
   router.delete("/delete", deleteQuestion);
