@@ -14,6 +14,11 @@ app.use(helmet());
 app.use(morgan("combined"));
 app.use(express.json());
 
+// Ruta de binevenida
+app.get("/", (req, res) => {
+  res.send("Welcome to the Quiz API!");
+});
+
 // Routes
 app.use("/api", Routes());
 
