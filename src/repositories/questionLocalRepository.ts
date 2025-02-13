@@ -100,8 +100,8 @@ const IQUIZZES: IQuiz[] = [
   {
     id: "1",
     category: [
-      { id: "cat1", name: "Ciencia", icon: "🔬" },
-      { id: "cat2", name: "Tecnología", icon: "💻" },
+      { id: "cat1", category: "Ciencia", icon: "🔬" },
+      { id: "cat2", category: "Tecnología", icon: "💻" },
     ],
     question: {
       question: "¿Cuál es el planeta más cercano al Sol?",
@@ -114,15 +114,15 @@ const IQUIZZES: IQuiz[] = [
       { answer: "Marte", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.EASY,
+      difficulty: QUESTION_DIFFICULTY.EASY,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "2",
     category: [
-      { id: "cat3", name: "Historia", icon: "📜" },
-      { id: "cat4", name: "Geografía", icon: "🌍" },
+      { id: "cat3", category: "Historia", icon: "📜" },
+      { id: "cat4", category: "Geografía", icon: "🌍" },
     ],
     question: {
       question: "¿En qué año llegó el hombre a la Luna?",
@@ -135,44 +135,44 @@ const IQUIZZES: IQuiz[] = [
       { answer: "1955", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.MEDIUM,
+      difficulty: QUESTION_DIFFICULTY.MEDIUM,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "3",
     category: [
-      { id: "cat5", name: "Arte", icon: "🎨" },
-      { id: "cat6", name: "Cultura", icon: "📚" },
+      { id: "cat5", category: "Arte", icon: "🎨" },
+      { id: "cat6", category: "Cultura", icon: "📚" },
     ],
     question: {
       question: "¿Quién pintó la Mona Lisa?",
       type: QUESTION_TYPES.TEXT,
     },
     answers: [
-      {
-        answer: "Leonardo da Vinci",
-        isCorrect: true,
-        type: QUESTION_TYPES.TEXT,
-      },
       { answer: "Pablo Picasso", isCorrect: false, type: QUESTION_TYPES.TEXT },
       {
         answer: "Vincent van Gogh",
         isCorrect: false,
         type: QUESTION_TYPES.TEXT,
       },
+      {
+        answer: "Leonardo da Vinci",
+        isCorrect: true,
+        type: QUESTION_TYPES.TEXT,
+      },
       { answer: "Claude Monet", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.EASY,
+      difficulty: QUESTION_DIFFICULTY.HARD,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "4",
     category: [
-      { id: "cat7", name: "Deportes", icon: "⚽" },
-      { id: "cat8", name: "Entretenimiento", icon: "🎬" },
+      { id: "cat7", category: "Deportes", icon: "⚽" },
+      { id: "cat8", category: "Entretenimiento", icon: "🎬" },
     ],
     question: {
       question: "¿Cuál es el deporte más popular del mundo?",
@@ -185,15 +185,15 @@ const IQUIZZES: IQuiz[] = [
       { answer: "Voleibol", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.EASY,
+      difficulty: QUESTION_DIFFICULTY.EASY,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "5",
     category: [
-      { id: "cat9", name: "Matemáticas", icon: "🧮" },
-      { id: "cat6", name: "Lógica", icon: "🤔" },
+      { id: "cat9", category: "Matemáticas", icon: "🧮" },
+      { id: "cat6", category: "Lógica", icon: "🤔" },
     ],
     question: {
       question: "¿Cuánto es 2 + 2?",
@@ -206,15 +206,15 @@ const IQUIZZES: IQuiz[] = [
       { answer: "6", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.EASY,
+      difficulty: QUESTION_DIFFICULTY.EASY,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "6",
     category: [
-      { id: "cat11", name: "Cine", icon: "🎥" },
-      { id: "cat6", name: "Series", icon: "📺" },
+      { id: "cat11", category: "Cine", icon: "🎥" },
+      { id: "cat6", category: "Series", icon: "📺" },
     ],
     question: {
       question: '¿Quién dirigió la película "El Padrino"?',
@@ -243,15 +243,15 @@ const IQUIZZES: IQuiz[] = [
       },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.MEDIUM,
+      difficulty: QUESTION_DIFFICULTY.MEDIUM,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "7",
     category: [
-      { id: "cat13", name: "Música", icon: "🎵" },
-      { id: "cat6", name: "Bandas", icon: "🎸" },
+      { id: "cat13", category: "Música", icon: "🎵" },
+      { id: "cat6", category: "Bandas", icon: "🎸" },
     ],
     question: {
       question: "¿Cuál es la banda británica más famosa de la historia?",
@@ -264,15 +264,15 @@ const IQUIZZES: IQuiz[] = [
       { answer: "Led Zeppelin", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.MEDIUM,
+      difficulty: QUESTION_DIFFICULTY.MEDIUM,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "8",
     category: [
-      { id: "cat15", name: "Cultura General", icon: "🌐" },
-      { id: "cat16", name: "Curiosidades", icon: "🤓" },
+      { id: "cat15", category: "Cultura General", icon: "🌐" },
+      { id: "cat16", category: "Curiosidades", icon: "🤓" },
     ],
     question: {
       question: "¿Cuál es el río más largo del mundo?",
@@ -285,15 +285,15 @@ const IQUIZZES: IQuiz[] = [
       { answer: "Misisipi", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.MEDIUM,
+      difficulty: QUESTION_DIFFICULTY.MEDIUM,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "9",
     category: [
-      { id: "cat17", name: "Tecnología", icon: "💻" },
-      { id: "cat18", name: "Programación", icon: "👨‍💻" },
+      { id: "cat17", category: "Tecnología", icon: "💻" },
+      { id: "cat18", category: "Programación", icon: "👨‍💻" },
     ],
     question: {
       question:
@@ -307,15 +307,15 @@ const IQUIZZES: IQuiz[] = [
       { answer: "C#", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.HARD,
+      difficulty: QUESTION_DIFFICULTY.HARD,
       type: QUESTION_TYPES.TEXT,
     },
   },
   {
     id: "10",
     category: [
-      { id: "cat19", name: "Ciencia", icon: "🔬" },
-      { id: "cat20", name: "Biología", icon: "🧬" },
+      { id: "cat19", category: "Ciencia", icon: "🔬" },
+      { id: "cat20", category: "Biología", icon: "🧬" },
     ],
     question: {
       question: "¿Cuál es el órgano más grande del cuerpo humano?",
@@ -328,7 +328,7 @@ const IQUIZZES: IQuiz[] = [
       { answer: "El corazón", isCorrect: false, type: QUESTION_TYPES.TEXT },
     ],
     options: {
-      dificulty: QUESTION_DIFFICULTY.EASY,
+      difficulty: QUESTION_DIFFICULTY.EASY,
       type: QUESTION_TYPES.TEXT,
     },
   },
