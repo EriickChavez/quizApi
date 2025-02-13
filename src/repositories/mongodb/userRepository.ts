@@ -7,8 +7,12 @@ import {
 
 export class UserRepository implements IUserRepository {
   async createUser(user: IUser): Promise<IUserDocument> {
-    const newUser = new User(user);
-    return await newUser.save();
+    try {
+      const newUser = new User(user);
+      return await newUser.save();
+    } catch (error: any) {
+      throw new Error("Error saving user: " + error.message);
+    }
   }
 
   async findUserByEmail(email: string): Promise<IUserDocument | null> {

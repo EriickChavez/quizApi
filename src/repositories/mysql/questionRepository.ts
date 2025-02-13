@@ -15,6 +15,9 @@ export class MysqlQuestionRepository implements IQuestionRepository {
   constructor(connection: mysql.Connection) {
     this.connection = connection;
   }
+  createMultiQuestion(questions: IQuiz[]): Promise<IQuestionDocument[]> {
+    throw new Error("Method not implemented.");
+  }
 
   async createQuestion(question: IQuiz): Promise<any> {
     const [result] = await this.connection.query("", []);
