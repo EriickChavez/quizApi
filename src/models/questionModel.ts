@@ -1,16 +1,44 @@
 import mongoose from "mongoose";
+import { IQuestionDocument } from "../repositories/interfaces/IQuestionRepository";
+import { QUESTION_DIFFICULTY, QUESTION_TYPES } from "../enums/questions";
+import { categorySchema } from "./categoryModel";
 
-const questionSchema = new mongoose.Schema(
+const questionSchema = new mongoose.Schema<IQuestionDocument>(
   {
-    question: { type: String, required: true },
-    options: [
+    id: { type: String, required: true },
+    category: { type: [categorySchema], required: true }, // Ahora es un array de categorías
+    question: {
+      question: { type: String, required: true },
+      type: {
+        type: String,
+        enum: Object.values(QUESTION_TYPES),
+        required: true,
+      },
+    },
+    answers: [
       {
-        option: { type: String, required: true },
+        id: { type: String, required: true },
+        answer: { type: String, required: true },
         isCorrect: { type: Boolean, required: true },
+        type: {
+          type: String,
+          enum: Object.values(QUESTION_TYPES),
+          required: true,
+        },
       },
     ],
+    options: {
+      difficulty: {
+        type: String,
+        enum: Object.values(QUESTION_DIFFICULTY),
+        required: true,
+      },
+    },
   },
   { timestamps: true }
 );
 
-export const Question = mongoose.model("Question", questionSchema);
+export const QuestionSchema = mongoose.model<IQuestionDocument>(
+  "Question",
+  questionSchema
+);

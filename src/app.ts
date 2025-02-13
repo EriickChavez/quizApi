@@ -5,7 +5,6 @@ import morgan from "morgan";
 import { errorHandler } from "./middleware/errorHandler";
 import Routes from "./routes";
 import { apiLimiter } from "./middleware/rateLimiter";
-import path from "path";
 
 const app = express();
 
@@ -17,9 +16,6 @@ app.use(express.json());
 
 // Routes
 app.use("/api", Routes());
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
 
 // Error Handling
 app.use(errorHandler);

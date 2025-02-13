@@ -1,6 +1,6 @@
 export enum QUESTION_TYPES {
-  IMAGE = "img",
-  TEXT = "text",
+  IMG = "IMG",
+  TEXT = "TXT",
 }
 
 export enum QUESTION_DIFFICULTY {

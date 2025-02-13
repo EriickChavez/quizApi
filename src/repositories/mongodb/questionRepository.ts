@@ -1,4 +1,4 @@
-import { Question } from "../../models/questionModel";
+import { QuestionSchema } from "../../models/questionModel";
 import {
   PaginatedApiResponse,
   PaginationOptions,
@@ -10,24 +10,39 @@ import {
 } from "../interfaces/IQuestionRepository";
 
 export class QuestionRepository implements IQuestionRepository {
-  createQuestion(question: IQuiz): Promise<IQuestionDocument> {
-    const newQuestion = new Question(question);
-    return newQuestion.save((err, doc) => {
-      if (err) {
-        throw new Error("Error saving question");
-      }
-      return doc;
-    });
+  async createMultiQuestion(questions: IQuiz[]): Promise<IQuestionDocument[]> {
+    try {
+      const insertedQuestions = await QuestionSchema.insertMany(questions);
+      return insertedQuestions as unknown as IQuestionDocument[];
+    } catch (error: any) {
+      throw new Error("Error saving multiple questions: " + error.message);
+    }
   }
-  findQuestionById(id: string): Promise<IQuestionDocument | null> {
-    return Question.findById(id);
+  async createQuestion(question: IQuiz): Promise<IQuestionDocument> {
+    try {
+      const newQuestion = new QuestionSchema(question);
+      return await newQuestion.save();
+    } catch (error: any) {
+      throw new Error("Error saving question: " + error.message);
+    }
   }
-  updateQuestionById(
+
+  async findQuestionById(id: string): Promise<IQuestionDocument | null> {
+    return await QuestionSchema.findById(id).lean<IQuestionDocument>().exec();
+  }
+
+  async updateQuestionById(
     id: string,
     updates: Partial<IQuiz>
   ): Promise<IQuestionDocument | null> {
-    return Question.findByIdAndUpdate(id, updates, { new: true });
+    return await QuestionSchema.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    })
+      .lean<IQuestionDocument>()
+      .exec();
   }
+
   async getQuestions(
     paginationOptions: PaginationOptions
   ): Promise<
@@ -35,19 +50,33 @@ export class QuestionRepository implements IQuestionRepository {
   > {
     const { page, limit } = paginationOptions;
     const skip = (page - 1) * limit;
-    const total = await Question.countDocuments().exec();
-    const data = await Question.find().skip(skip).limit(limit).exec();
+
+    const total = await QuestionSchema.countDocuments().exec();
+    const data = await QuestionSchema.find()
+      .skip(skip)
+      .limit(limit)
+      .lean<IQuestionDocument>()
+      .exec();
+
     return { data, total, page, limit };
   }
-  deleteQuestionById(id: string): Promise<boolean | null> {
-    return Question.findByIdAndDelete(id);
+
+  async deleteQuestionById(id: string): Promise<boolean> {
+    const deleted = await QuestionSchema.findByIdAndDelete(id);
+    return !!deleted;
   }
-  getQuestionsByCategory(
+
+  async getQuestionsByCategory(
     paginationOptions: PaginationOptions,
     category: string
   ): Promise<IQuestionDocument[]> {
     const { page, limit } = paginationOptions;
     const skip = (page - 1) * limit;
-    return Question.find({ category }).skip(skip).limit(limit).exec();
+
+    return await QuestionSchema.find({ category })
+      .skip(skip)
+      .limit(limit)
+      .lean<IQuestionDocument[]>() // Cambia a IQuestionDocument[]
+      .exec();
   }
 }

@@ -19,14 +19,14 @@ export interface IQuestion {
 }
 
 export interface IAnswer {
+  id: string;
   answer: string;
   isCorrect: boolean;
   type: QUESTION_TYPES;
 }
 
 export interface IOptions {
-  dificulty: QUESTION_DIFFICULTY;
-  type: QUESTION_TYPES;
+  difficulty: QUESTION_DIFFICULTY;
 }
 
 // @ts-ignore

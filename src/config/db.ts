@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
 import mysql from "mysql2/promise";
 import logger from "../middleware/logger";
+import { ENV } from "./ENV";
 
 // MongoDB Connection
 export const connectMongoDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI!);
+    const uriMongo = ENV.MONGO_URI;
+    await mongoose.connect(uriMongo);
     console.log("MongoDB connected");
   } catch (error) {
     console.error("MongoDB connection error:", error);
@@ -17,10 +19,10 @@ export const connectMongoDB = async () => {
 export const connectMySQL = async () => {
   try {
     const connection = await mysql.createConnection({
-      host: process.env.MYSQL_HOST,
-      user: process.env.MYSQL_USER,
-      password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DATABASE,
+      host: ENV.MYSQL_HOST,
+      user: ENV.MYSQL_USER,
+      password: ENV.MYSQL_PASSWORD,
+      database: ENV.MYSQL_DATABASE,
     });
     logger.info("MySQL connected");
     return connection;

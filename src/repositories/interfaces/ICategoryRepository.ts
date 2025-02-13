@@ -6,7 +6,7 @@ import {
 
 export interface ICategory {
   id: string;
-  name: string;
+  category: string;
   icon?: string;
 }
 
