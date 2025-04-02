@@ -2,7 +2,7 @@ import {
   IQuiz,
   IQuestionRepository,
 } from "../../repositories/interfaces/IQuestionRepository";
-import { PaginationOptions } from "../../utils/apiResponse";
+import { PaginationOptions, QuizGetWithParams } from "../../utils/apiResponse";
 
 export class QuestionService {
   private questionRepository: IQuestionRepository;
@@ -58,6 +58,17 @@ export class QuestionService {
     const questions = await this.questionRepository.getQuestionsByCategory(
       paginationOptions,
       categoryId
+    );
+    return questions;
+  }
+
+  async getQuestionsByFilter(
+    params: QuizGetWithParams,
+    paginationOptions: PaginationOptions,
+  ) {
+    const questions = await this.questionRepository.getQuestionsByFilter(
+      params,
+      paginationOptions
     );
     return questions;
   }

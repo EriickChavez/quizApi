@@ -6,6 +6,7 @@ import {
   getQuestionById,
   getQuestions,
   getQuestionsByCategory,
+  getQuestionsByFilter,
   updateQuestion,
 } from "../controller/question/questionController";
 
@@ -17,6 +18,7 @@ const questionRoutes = (app: Router) => {
   router.post("/create", createQuestion);
   router.post("/createMulti", createMultiQuestion);
   router.get("/get", getQuestions);
+  router.get("/filter", getQuestionsByFilter);
   router.put("/update", updateQuestion);
   router.delete("/delete", deleteQuestion);
   router.get("/get/:id", getQuestionById);

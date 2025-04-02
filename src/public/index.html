@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizzApp - Documentación de Endpoints</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+    <h1>QuizzApp - Documentación de Endpoints</h1>
+
+    <!-- Endpoint 1: GET /question/get -->
+    <div class="endpoint">
+        <h2><span class="method get">GET</span> /question/get</h2>
+        <p>Obtener todas las preguntas (paginadas)</p>
+        <div class="tabs">
+            <div class="tab active" data-tab="get-request">Ejemplo</div>
+            <div class="tab" data-tab="get-response">Respuesta</div>
+        </div>
+        <div id="get-request" class="tab-content active">
+            <pre><code>// Parámetros opcionales: page, limit
+fetch('/question/get?page=1&limit=5')
+  .then(response => response.json())
+  .then(data => console.log(data));</code></pre>
+        </div>
+        <div id="get-response" class="tab-content">
+            <pre><code>{
+  "status": 200,
+  "message": "Questions retrieved successfully",
+  "data": [
+    {
+      "id": "1",
+      "category": [{ "id": "ciencia", "category": "Ciencia" }],
+      "question": { 
+        "question": "¿Qué es el ADN?", 
+        "type": "multiple_choice" 
+      },
+      "options": { "difficulty": "medio" }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 5,
+    "total": 50
+  }
+}</code></pre>
+        </div>
+    </div>
+
+    <!-- Endpoint 2: GET /question/filter -->
+    <div class="endpoint">
+        <h2><span class="method get">GET</span> /question/filter</h2>
+        <p>Filtrar preguntas por categoría/dificultad</p>
+        <div class="tabs">
+            <div class="tab active" data-tab="filter-request">Ejemplo</div>
+            <div class="tab" data-tab="filter-response">Respuesta</div>
+        </div>
+        <div id="filter-request" class="tab-content active">
+            <pre><code>fetch('/question/filter?category=ciencia&difficulty=medio&limit=5')
+  .then(response => response.json())
+  .then(data => console.log(data));</code></pre>
+        </div>
+        <div id="filter-response" class="tab-content">
+            <pre><code>{
+  "status": 200,
+  "message": "Questions filtered successfully",
+  "data": [
+    {
+      "id": "1",
+      "category": [{ "id": "ciencia", "category": "Ciencia" }],
+      "question": {
+        "question": "¿Qué es la fotosíntesis?",
+        "type": "multiple_choice"
+      },
+      "options": { "difficulty": "medio" }
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "limit": 5,
+    "total": 12
+  }
+}</code></pre>
+        </div>
+    </div>
+    <!-- Endpoint 7: GET /question/get/:id -->
+    <div class="endpoint">
+        <h2><span class="method get">GET</span> /question/get/<span class="param">:id</span></h2>
+        <p>Obtener una pregunta específica por su ID</p>
+        <div class="tabs">
+            <div class="tab active" data-tab="getById-request">Ejemplo</div>
+            <div class="tab" data-tab="getById-response">Respuesta</div>
+            <div class="tab" data-tab="getById-error">Error</div>
+        </div>
+        <div id="getById-request" class="tab-content active">
+            <pre><code>// Sin body, el ID va en la URL
+    fetch('/question/get/pregunta-123', {
+      headers: {
+        'Authorization': 'Bearer tu-token-jwt' // Opcional
+      }
+    })</code></pre>
+        </div>
+        <div id="getById-response" class="tab-content">
+            <pre><code>{
+      "status": 200,
+      "message": "Question retrieved successfully",
+      "data": {
+        "id": "pregunta-123",
+        "category": [
+          {
+            "id": "historia",
+            "category": "Historia",
+            "icon": "🏛️"
+          }
+        ],
+        "question": {
+          "question": "¿Quién fue el primer presidente de EE.UU.?",
+          "type": "multiple_choice"
+        },
+        "answers": [
+          {
+            "id": "1",
+            "answer": "George Washington",
+            "isCorrect": true,
+            "type": "text"
+          },
+          {
+            "id": "2",
+            "answer": "Thomas Jefferson",
+            "isCorrect": false,
+            "type": "text"
+          }
+        ],
+        "options": {
+          "difficulty": "medio",
+          "timeLimit": 30
+        },
+        "createdAt": "2023-10-15T08:30:00Z",
+        "updatedAt": "2023-11-05T14:20:00Z"
+      }
+    }</code></pre>
+        </div>
+        <div id="getById-error" class="tab-content">
+            <pre><code>// Caso: ID no encontrado
+    {
+      "status": 404,
+      "error": "Not Found",
+      "message": "No se encontró pregunta con ID: pregunta-inexistente",
+      "code": "QUIZ_404"
+    }
+    
+    // Caso: ID con formato inválido
+    {
+      "status": 400,
+      "error": "Bad Request",
+      "message": "El ID debe tener al menos 3 caracteres",
+      "code": "VALIDATION_400"
+    }</code></pre>
+        </div>
+    </div>
+    <!-- Más endpoints aquí -->
+    <!-- Endpoint 8: GET /question/get/category/:id -->
+    <div class="endpoint">
+        <h2><span class="method get">GET</span> /question/get/category/<span class="param">:id</span></h2>
+        <p>Obtener todas las preguntas de una categoría específica (paginadas)</p>
+        <div class="tabs">
+            <div class="tab active" data-tab="getByCategory-request">Ejemplo</div>
+            <div class="tab" data-tab="getByCategory-response">Respuesta</div>
+            <div class="tab" data-tab="getByCategory-error">Error</div>
+        </div>
+        <div id="getByCategory-request" class="tab-content active">
+            <pre><code>// Parámetros opcionales: page, limit
+    fetch('/question/get/category/historia?page=1&limit=3', {
+      headers: {
+        'Authorization': 'Bearer tu-token-jwt' // Opcional
+      }
+    })</code></pre>
+        </div>
+        <div id="getByCategory-response" class="tab-content">
+            <pre><code>{
+      "status": 200,
+      "message": "Questions retrieved successfully",
+      "data": [
+        {
+          "id": "pregunta-123",
+          "question": {
+            "question": "¿Quién fue el primer presidente de EE.UU.?",
+            "type": "multiple_choice"
+          },
+          "options": {
+            "difficulty": "medio"
+          }
+        },
+        {
+          "id": "pregunta-456",
+          "question": {
+            "question": "¿En qué año terminó la Segunda Guerra Mundial?",
+            "type": "text"
+          },
+          "options": {
+            "difficulty": "facil"
+          }
+        }
+      ],
+      "pagination": {
+        "page": 1,
+        "limit": 3,
+        "total": 15,
+        "totalPages": 5
+      },
+      "categoryInfo": {
+        "id": "historia",
+        "name": "Historia",
+        "totalQuestions": 15
+      }
+    }</code></pre>
+        </div>
+        <div id="getByCategory-error" class="tab-content">
+            <pre><code>// Caso: Categoría no encontrada
+    {
+      "status": 404,
+      "error": "Category not found",
+      "message": "La categoría 'inexistente' no está registrada",
+      "code": "CAT_404"
+    }
+    
+    // Caso: Sin preguntas en la categoría
+    {
+      "status": 200,
+      "message": "No questions found for this category",
+      "data": [],
+      "pagination": {
+        "page": 1,
+        "limit": 10,
+        "total": 0,
+        "totalPages": 0
+      },
+      "categoryInfo": {
+        "id": "arte-moderno",
+        "name": "Arte Moderno",
+        "totalQuestions": 0
+      }
+    }</code></pre>
+        </div>
+    </div>
+    <!-- Más endpoints aquí -->
+    <!-- Endpoint 3: POST /question/create -->
+    <div class="endpoint">
+        <h2><span class="method post">POST</span> /question/create</h2>
+        <p>Crear una nueva pregunta</p>
+        <div class="tabs">
+            <div class="tab active" data-tab="create-request">Ejemplo</div>
+            <div class="tab" data-tab="create-response">Respuesta</div>
+        </div>
+        <div id="create-request" class="tab-content active">
+            <pre><code>// Body: IQuiz
+    fetch('/question/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer tu-token-jwt' // Opcional para autenticación
+      },
+      body: JSON.stringify({
+        "category": [{ 
+          "id": "historia", 
+          "category": "Historia",
+          "icon": "🏛️" 
+        }],
+        "question": {
+          "question": "¿En qué año cayó el Muro de Berlín?",
+          "type": "multiple_choice"
+        },
+        "answers": [
+          { "id": "1", "answer": "1989", "isCorrect": true, "type": "text" },
+          { "id": "2", "answer": "1991", "isCorrect": false, "type": "text" }
+        ],
+        "options": {
+          "difficulty": "medio",
+          "timeLimit": 30 // Opcional para modo supervivencia
+        }
+      })
+    })</code></pre>
+        </div>
+        <div id="create-response" class="tab-content">
+            <pre><code>{
+      "status": 201,
+      "message": "Question created successfully",
+      "data": {
+        "id": "nuevo-id-generado",
+        "category": [{ "id": "historia", "category": "Historia", "icon": "🏛️" }],
+        "question": {
+          "question": "¿En qué año cayó el Muro de Berlín?",
+          "type": "multiple_choice"
+        },
+        "options": {
+          "difficulty": "medio",
+          "timeLimit": 30
+        },
+        "createdAt": "2023-11-10T12:00:00Z"
+      }
+    }</code></pre>
+        </div>
+    </div>
+
+    <!-- Endpoint 4: POST /question/createMulti -->
+    <div class="endpoint">
+        <h2><span class="method post">POST</span> /question/createMulti</h2>
+        <p>Crear múltiples preguntas en una sola operación</p>
+        <div class="tabs">
+            <div class="tab active" data-tab="createMulti-request">Ejemplo</div>
+            <div class="tab" data-tab="createMulti-response">Respuesta</div>
+        </div>
+        <div id="createMulti-request" class="tab-content active">
+            <pre><code>// Body: IQuiz[]
+    fetch('/question/createMulti', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer tu-token-jwt'
+      },
+      body: JSON.stringify({
+        "questions": [
+          {
+            "category": [{ "id": "ciencia", "category": "Ciencia" }],
+            "question": {
+              "question": "¿Cuál es el símbolo químico del oro?",
+              "type": "text"
+            },
+            "answers": [
+              { "id": "1", "answer": "Au", "isCorrect": true, "type": "text" }
+            ],
+            "options": {
+              "difficulty": "facil"
+            }
+          },
+          {
+            "category": [{ "id": "matematicas", "category": "Matemáticas" }],
+            "question": {
+              "question": "¿Cuánto es 2 + 2?",
+              "type": "text"
+            },
+            "answers": [
+              { "id": "1", "answer": "4", "isCorrect": true, "type": "text" }
+            ],
+            "options": {
+              "difficulty": "facil"
+            }
+          }
+        ]
+      })
+    })</code></pre>
+        </div>
+        <div id="createMulti-response" class="tab-content">
+            <pre><code>{
+      "status": 201,
+      "message": "2 questions created successfully",
+      "data": [
+        {
+          "id": "id-pregunta-1",
+          "category": [{ "id": "ciencia", "category": "Ciencia" }],
+          "question": {
+            "question": "¿Cuál es el símbolo químico del oro?",
+            "type": "TXT"
+          },
+          "options": {
+            "difficulty": "facil"
+          }
+        },
+        {
+          "id": "id-pregunta-2",
+          "category": [{ "id": "matematicas", "category": "Matemáticas" }],
+          "question": {
+            "question": "¿Cuánto es 2 + 2?",
+            "type": "TXT"
+          },
+          "options": {
+            "difficulty": "0"
+          }
+        }
+      ],
+    }</code></pre>
+        </div>
+    </div>
+    <!-- Más endpoints aquí -->
+    <!-- Endpoint 5: PUT /question/update -->
+    <div class="endpoint">
+        <h2><span class="method put">PUT</span> /question/update</h2>
+        <p>Actualizar una pregunta existente</p>
+        <div class="tabs">
+            <div class="tab active" data-tab="update-request">Ejemplo</div>
+            <div class="tab" data-tab="update-response">Respuesta</div>
+            <div class="tab" data-tab="update-error">Error</div>
+        </div>
+        <div id="update-request" class="tab-content active">
+            <pre><code>// Body: { id: string, updates: Partial&lt;IQuiz&gt; }
+    fetch('/question/update', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer tu-token-jwt'
+      },
+      body: JSON.stringify({
+        "id": "pregunta-existente-123",
+        "updates": {
+          "question": {
+            "question": "¿En qué año cayó realmente el Muro de Berlín?",
+            "type": "multiple_choice"
+          },
+          "answers": [
+            { "id": "1", "answer": "1989", "isCorrect": true },
+            { "id": "2", "answer": "1991", "isCorrect": false }
+          ],
+          "options": {
+            "difficulty": "dificil"
+          }
+        }
+      })
+    })</code></pre>
+        </div>
+        <div id="update-response" class="tab-content">
+            <pre><code>{
+      "status": 200,
+      "message": "Question updated successfully",
+      "data": {
+        "id": "pregunta-existente-123",
+        "updatesApplied": {
+          "question.question": true,
+          "question.type": true,
+          "answers": true,
+          "options.difficulty": true
+        },
+        "updatedAt": "2023-11-10T15:30:00Z"
+      }
+    }</code></pre>
+        </div>
+        <div id="update-error" class="tab-content">
+            <pre><code>// Caso: ID no encontrado
+    {
+      "status": 404,
+      "error": "Question not found",
+      "message": "No se encontró la pregunta con ID: pregunta-inexistente",
+      "code": "QUIZ_404"
+    }
+    
+    // Caso: Campos inválidos
+    {
+      "status": 400,
+      "error": "Validation Error",
+      "message": "El campo 'options.difficulty' debe ser uno de: facil, medio, dificil",
+      "details": [
+        {
+          "field": "options.difficulty",
+          "error": "Valor no permitido"
+        }
+      ]
+    }</code></pre>
+        </div>
+    </div>
+    <!-- Endpoint 6: DELETE /question/delete -->
+    <div class="endpoint">
+        <h2><span class="method delete">DELETE</span> /question/delete</h2>
+        <p>Eliminar una pregunta existente</p>
+        <div class="tabs">
+            <div class="tab active" data-tab="delete-request">Ejemplo</div>
+            <div class="tab" data-tab="delete-response">Respuesta</div>
+            <div class="tab" data-tab="delete-error">Error</div>
+        </div>
+        <div id="delete-request" class="tab-content active">
+            <pre><code>// Body: { id: string }
+fetch('/question/delete', {
+  method: 'DELETE',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer tu-token-jwt'
+  },
+  body: JSON.stringify({
+    "id": "pregunta-a-eliminar-456"
+  })
+})</code></pre>
+        </div>
+        <div id="delete-response" class="tab-content">
+            <pre><code>{
+  "status": 200,
+  "message": "Question deleted successfully",
+  "data": {
+    "id": "pregunta-a-eliminar-456",
+    "deletedAt": "2023-11-10T16:45:00Z",
+    "affectedCategories": ["historia"]
+  }
+}</code></pre>
+        </div>
+        <div id="delete-error" class="tab-content">
+            <pre><code>// Caso: ID no encontrado
+{
+  "status": 404,
+  "error": "Question not found",
+  "message": "No existe pregunta con ID: pregunta-inexistente",
+  "code": "QUIZ_404"
+}
+
+// Caso: No autorizado
+{
+  "status": 403,
+  "error": "Forbidden",
+  "message": "No tienes permisos para eliminar esta pregunta",
+  "code": "AUTH_403"
+}</code></pre>
+        </div>
+    </div>
+    <!-- Más endpoints aquí -->
+    <script src="/js/scripts.js"></script>
+
+</body>
+
+</html>

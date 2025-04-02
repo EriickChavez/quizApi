@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #333;
+}
+
+.endpoint {
+    background: #f5f5f5;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.method {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 3px;
+    color: white;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.get {
+    background: #61affe;
+}
+
+.post {
+    background: #49cc90;
+}
+
+.put {
+    background: #fca130;
+}
+
+.delete {
+    background: #f93e3e;
+}
+
+pre {
+    background: #2d2d2d;
+    color: #f8f8f8;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    tab-size: 2;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.tab {
+    padding: 10px 15px;
+    cursor: pointer;
+    background: #e0e0e0;
+    margin-right: 5px;
+    border-radius: 5px 5px 0 0;
+    transition: all 0.3s ease;
+}
+
+.tab:hover {
+    background: #d0d0d0;
+}
+
+.tab.active {
+    background: #f5f5f5;
+    font-weight: bold;
+    border-bottom: 3px solid #61affe;
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Agregar a tu archivo styles.css */
+.param {
+    color: #d63384;
+    /* Color para parámetros en las rutas */
+    font-family: monospace;
+    font-weight: bold;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

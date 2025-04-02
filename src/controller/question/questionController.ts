@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { questionServiceInstance } from "../../services/instances/questionServiceInstance";
 import {
   PaginationOptions,
+  QuizGetWithParams,
   sendPaginatedResponse,
   sendResponse,
 } from "../../utils/apiResponse";
@@ -134,3 +135,45 @@ export const getQuestionsByCategory = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getQuestionsByFilter = async (req: Request, res: Response) => {
+  try {
+    const { category, mode, difficulty } = req.query
+    const paginationOptions: PaginationOptions = {
+      page:
+        typeof req.query.page === "string"
+          ? parseInt(req.query.page)
+          : PAGINATED_QUIZ_PAGE,
+      limit:
+        typeof req.query.limit === "string"
+          ? parseInt(req.query.limit)
+          : PAGINATED_QUIZ_LIMIT,
+    };
+    const params: QuizGetWithParams = {}
+
+    if (category) params.category = category as string
+    if (mode) params.mode = mode as string
+    if (difficulty) params.difficulty = difficulty as string
+
+    console.log({ query: req.query })
+
+    const { limit, page, total, data } =
+      await questionServiceInstance.getQuestionsByFilter(params, paginationOptions);
+
+    sendPaginatedResponse(
+      res,
+      200,
+      "Questions retrieved successfully",
+      data,
+      page,
+      limit,
+      total
+    );
+
+  } catch (error: any) {
+    sendResponse(res, 400, error.message, null, {
+      code: "AUTH_002",
+      details: error.message,
+    });
+  }
+}

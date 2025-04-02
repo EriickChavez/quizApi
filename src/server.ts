@@ -2,7 +2,6 @@ import app from "./app";
 import { connectMongoDB } from "./config/db";
 import { ENV } from "./config/ENV";
 import logger from "./middleware/logger";
-import os from "os";
 
 const PORT = ENV.PORT;
 

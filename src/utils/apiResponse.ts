@@ -59,3 +59,9 @@ export interface PaginationOptions {
   page: number;
   limit: number;
 }
+
+export interface QuizGetWithParams {
+  category?: string;
+  mode?: string;
+  difficulty?: string;
+}

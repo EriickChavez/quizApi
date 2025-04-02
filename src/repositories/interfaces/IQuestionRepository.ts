@@ -2,6 +2,7 @@ import { Document } from "mongoose";
 import {
   PaginatedApiResponse,
   PaginationOptions,
+  QuizGetWithParams,
 } from "../../utils/apiResponse";
 import { QUESTION_TYPES, QUESTION_DIFFICULTY } from "../../enums/questions";
 import { ICategory } from "./ICategoryRepository";
@@ -30,7 +31,7 @@ export interface IOptions {
 }
 
 // @ts-ignore
-export interface IQuestionDocument extends IQuiz, Document {}
+export interface IQuestionDocument extends IQuiz, Document { }
 
 export interface IQuestionRepository {
   createQuestion(question: IQuiz): Promise<IQuestionDocument>;
@@ -50,4 +51,9 @@ export interface IQuestionRepository {
     paginationOptions: PaginationOptions,
     category: string
   ): Promise<IQuestionDocument[]>;
+  getQuestionsByFilter(
+    params: QuizGetWithParams,
+    paginationOptions: PaginationOptions,
+  ): Promise<
+    Omit<PaginatedApiResponse, "res" | "message" | "success" | "error">>;
 }
