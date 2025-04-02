@@ -1,5 +1,5 @@
 import { QUESTION_DIFFICULTY, QUESTION_TYPES } from "../enums/questions";
-import { PaginationOptions, PaginatedApiResponse } from "../utils/apiResponse";
+import { PaginationOptions, PaginatedApiResponse, QuizGetWithParams } from "../utils/apiResponse";
 import { ICategory } from "./interfaces/ICategoryRepository";
 import {
   IQuiz,
@@ -9,6 +9,9 @@ import {
 import { v4 as uuidv4 } from "uuid";
 
 export class LocalQuestionRepository implements IQuestionRepository {
+  getQuestionsByFilter(params: QuizGetWithParams, paginationOptions: PaginationOptions): Promise<Omit<PaginatedApiResponse, "res" | "message" | "success" | "error">> {
+    throw new Error("Method not implemented.");
+  }
   private questions: IQuiz[] = IQUIZZES;
 
   createQuestion(question: Omit<IQuiz, "id">): Promise<IQuestionDocument> {
