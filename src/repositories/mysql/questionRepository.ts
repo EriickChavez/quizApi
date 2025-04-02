@@ -7,6 +7,7 @@ import {
 import {
   PaginationOptions,
   PaginatedApiResponse,
+  QuizGetWithParams,
 } from "../../utils/apiResponse";
 
 export class MysqlQuestionRepository implements IQuestionRepository {
@@ -14,6 +15,9 @@ export class MysqlQuestionRepository implements IQuestionRepository {
 
   constructor(connection: mysql.Connection) {
     this.connection = connection;
+  }
+  getQuestionsByFilter(params: QuizGetWithParams, paginationOptions: PaginationOptions): Promise<Omit<PaginatedApiResponse, "res" | "message" | "success" | "error">> {
+    throw new Error("Method not implemented.");
   }
   createMultiQuestion(questions: IQuiz[]): Promise<IQuestionDocument[]> {
     throw new Error("Method not implemented.");
