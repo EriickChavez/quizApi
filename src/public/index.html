@@ -10,7 +10,134 @@
 
 <body>
     <h1>QuizzApp - Documentación de Endpoints</h1>
+    <!-- Sección de Enums -->
+    <div class="endpoint">
+        <h2>📊 Enums de la Aplicación</h2>
 
+        <!-- Enum QUESTION_TYPES -->
+        <div class="enum-section">
+            <h3><span class="enum-name">QUESTION_TYPES</span> - Tipos de Pregunta</h3>
+            <table class="enum-table">
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                        <th>Uso típico</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>IMG</code></td>
+                        <td>Pregunta con imagen</td>
+                        <td>Cuando la pregunta requiere una imagen como parte del contenido</td>
+                    </tr>
+                    <tr>
+                        <td><code>TXT</code></td>
+                        <td>Pregunta de texto</td>
+                        <td>Preguntas tradicionales basadas solo en texto</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="enum-example">
+                <h4>Ejemplo de uso:</h4>
+                <pre><code>const nuevaPregunta = {
+  question: {
+    question: "¿Qué se muestra en esta imagen?",
+    type: QUESTION_TYPES.IMG  // ← Uso del enum
+  },
+  // ... otros campos
+};</code></pre>
+            </div>
+        </div>
+
+        <!-- Enum QUESTION_DIFFICULTY -->
+        <div class="enum-section">
+            <h3><span class="enum-name">QUESTION_DIFFICULTY</span> - Niveles de Dificultad</h3>
+            <table class="enum-table">
+                <thead>
+                    <tr>
+                        <th>Valor</th>
+                        <th>Número</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>EASY</code></td>
+                        <td>0</td>
+                        <td>Preguntas básicas, para principiantes</td>
+                    </tr>
+                    <tr>
+                        <td><code>MEDIUM</code></td>
+                        <td>1</td>
+                        <td>Preguntas intermedias, requieren conocimiento moderado</td>
+                    </tr>
+                    <tr>
+                        <td><code>HARD</code></td>
+                        <td>2</td>
+                        <td>Preguntas complejas, para expertos</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="enum-example">
+                <h4>Ejemplo de uso:</h4>
+                <pre><code>if (pregunta.options.difficulty === QUESTION_DIFFICULTY.HARD) {
+  // Lógica para preguntas difíciles
+}</code></pre>
+            </div>
+        </div>
+
+        <!-- Enum ERROR_CODES -->
+        <div class="enum-section">
+            <h3><span class="enum-name">ERROR_CODES</span> - Códigos de Error</h3>
+            <table class="enum-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Valor</th>
+                        <th>Descripción</th>
+                        <th>HTTP Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>VALIDATION_ERROR</code></td>
+                        <td>AUTH_001</td>
+                        <td>Error en validación de campos</td>
+                        <td>400 (Bad Request)</td>
+                    </tr>
+                    <tr>
+                        <td><code>INVALID_CREDENTIALS</code></td>
+                        <td>AUTH_002</td>
+                        <td>Credenciales incorrectas</td>
+                        <td>401 (Unauthorized)</td>
+                    </tr>
+                    <tr>
+                        <td><code>USER_NOT_FOUND</code></td>
+                        <td>AUTH_003</td>
+                        <td>Usuario no existe en el sistema</td>
+                        <td>404 (Not Found)</td>
+                    </tr>
+                    <tr>
+                        <td><code>INVALID_RESET_TOKEN</code></td>
+                        <td>AUTH_004</td>
+                        <td>Token de recuperación inválido o expirado</td>
+                        <td>410 (Gone)</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="enum-example">
+                <h4>Ejemplo de manejo:</h4>
+                <pre><code>try {
+  // Lógica que puede fallar
+} catch (error) {
+  if (error.code === ERROR_CODES.INVALID_CREDENTIALS) {
+    // Mostrar mensaje específico
+  }
+}</code></pre>
+            </div>
+        </div>
+    </div>
     <!-- Endpoint 1: GET /question/get -->
     <div class="endpoint">
         <h2><span class="method get">GET</span> /question/get</h2>
