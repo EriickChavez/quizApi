@@ -11,4 +11,8 @@ export class CategoryService {
   async getCategoryById(id: string): Promise<ICategory | null> {
     return await this.categoryRepository.getById(id);
   }
+
+  async createCategory(categoryData: Omit<ICategory, 'id'> & { id?: string }): Promise<ICategory> {
+    return await this.categoryRepository.create(categoryData);
+  }
 }

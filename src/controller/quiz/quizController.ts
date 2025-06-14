@@ -12,6 +12,32 @@ import {
 } from "../../constants/paginated";
 
 import { answerHistoryServiceInstance } from "../../services/instances/answerHistoryServiceInstance";
+import { IQuiz } from "../../interfaces/IQuiz";
+import { CreateQuizSchema } from "../../validations/quiz.validation";
+import { ValidationError } from "../../exceptions/ValidationError";
+interface ICreateQuizRequest extends Request {
+  body: {
+    category: Array<{
+      id: string;
+      category: string;
+      icon?: string;
+    }>;
+    question: {
+      text: string;
+      type: 'text' | 'image';
+    };
+    answers: Array<{
+      id: string;
+      answer: string;
+      isCorrect: boolean;
+      type: 'text' | 'image';
+    }>;
+    options: {
+      difficulty: 'easy' | 'medium' | 'hard';
+    };
+  };
+}
+
 
 export const getQuizzes = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -51,6 +77,25 @@ export const getQuizzes = async (req: Request, res: Response, next: NextFunction
       result.limit,
       result.total
     );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createQuiz = async (
+  req: ICreateQuizRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const quizData = req.body;
+    const { error } = CreateQuizSchema.validate(req.body);
+    if (error) {
+      throw new ValidationError(error.details[0].message);
+    }
+    const createdQuiz = await quizServiceInstance.createQuiz(quizData as unknown as IQuiz);
+
+    sendResponse(res, 201, 'Quiz creado exitosamente', createdQuiz);
   } catch (error) {
     next(error);
   }

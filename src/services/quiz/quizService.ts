@@ -1,5 +1,6 @@
 import { PaginationOptions } from '../../utils/apiResponse';
 import { IQuizRepository } from '../../repositories/interfaces/IQuizRepository';
+import { IQuiz } from '../../interfaces/IQuiz';
 
 export class QuizService {
   constructor(private quizRepository: IQuizRepository) { }
@@ -11,5 +12,9 @@ export class QuizService {
     excludeIds: string[] = []
   ) {
     return this.quizRepository.getQuizzes(filters, pagination, random, excludeIds);
+  }
+
+  async createQuiz(quizData: Omit<IQuiz, '_id'>): Promise<IQuiz> {
+    return this.quizRepository.createQuiz(quizData);
   }
 }

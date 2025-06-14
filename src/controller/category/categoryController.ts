@@ -2,6 +2,14 @@ import { Request, Response, NextFunction } from "express";
 import { sendResponse } from "../../utils/apiResponse";
 import { categoryServiceInstance } from "../../services/instances/categoryServiceInstance";
 
+interface CreateCategoryRequest extends Request {
+  body: {
+    category: string;
+    icon?: string;
+    id?: string;
+  };
+}
+
 export const getAllCategories = async (
   req: Request,
   res: Response,
@@ -29,6 +37,22 @@ export const getCategoryById = async (
     }
 
     sendResponse(res, 200, 'Categoría obtenida correctamente', category);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createCategory = async (
+  req: CreateCategoryRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const categoryData = req.body;
+
+    const createdCategory = await categoryServiceInstance.createCategory(categoryData);
+
+    sendResponse(res, 201, 'Categoría creada exitosamente', createdCategory);
   } catch (error) {
     next(error);
   }

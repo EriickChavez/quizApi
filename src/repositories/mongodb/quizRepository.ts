@@ -4,8 +4,9 @@ import { IQuizRepository } from '../interfaces/IQuizRepository';
 import { QuizModel } from '../../models/quizModel';
 
 export class QuizMongoRepository implements IQuizRepository {
-  createQuiz(quiz: IQuiz): Promise<IQuiz> {
-    throw new Error('Method not implemented.');
+  async createQuiz(quizData: Omit<IQuiz, '_id'>): Promise<IQuiz> {
+    const newQuiz = new QuizModel(quizData);
+    return await newQuiz.save();
   }
   createMultiQuiz(quizzes: IQuiz[]): Promise<IQuiz[]> {
     throw new Error('Method not implemented.');
