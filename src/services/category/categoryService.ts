@@ -1,45 +1,14 @@
-import {
-  ICategory,
-  ICategoryRepository,
-} from "../../repositories/interfaces/ICategoryRepository";
-import { PaginationOptions } from "../../utils/apiResponse";
+import { ICategory } from "../../interfaces/ICategory";
+import { ICategoryRepository } from "../../repositories/interfaces/ICategoryRepository";
 
 export class CategoryService {
-  private categoryRepository: ICategoryRepository;
+  constructor(private categoryRepository: ICategoryRepository) { }
 
-  constructor(categoryRepository: ICategoryRepository) {
-    this.categoryRepository = categoryRepository;
+  async getAllCategories(): Promise<ICategory[]> {
+    return await this.categoryRepository.getAll();
   }
 
-  async createCategory(category: ICategory) {
-    const newCategory = await this.categoryRepository.createCategory(category);
-    return newCategory;
-  }
-
-  async getCategories(paginationOptions: PaginationOptions) {
-    const categories = await this.categoryRepository.getCategories(
-      paginationOptions
-    );
-    return categories;
-  }
-
-  async updateCategory(id: string, updates: Partial<ICategory>) {
-    const updatedCategory = await this.categoryRepository.updateCategory(
-      id,
-      updates
-    );
-    return updatedCategory;
-  }
-
-  async deleteCategory(id: string) {
-    const deletedCategory = await this.categoryRepository.deleteCategory(id);
-    return deletedCategory;
-  }
-
-  async createMultiCategory(categories: Omit<ICategory, "id">[]) {
-    const newCategories = await this.categoryRepository.createMultiCategory(
-      categories
-    );
-    return newCategories;
+  async getCategoryById(id: string): Promise<ICategory | null> {
+    return await this.categoryRepository.getById(id);
   }
 }

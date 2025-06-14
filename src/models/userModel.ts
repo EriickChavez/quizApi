@@ -1,14 +1,13 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import { IUser } from '../interfaces/IUser';
 
-const userSchema = new mongoose.Schema(
-  {
-    id: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    resetPasswordToken: { type: String },
-    resetPasswordExpires: { type: Date },
-  },
-  { timestamps: true }
-);
+const UserSchema = new mongoose.Schema<IUser>({
+  name: String,
+  email: { type: String, unique: true },
+  passwordHash: String,
+  avatar: String,
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now }
+});
 
-export const User = mongoose.model("User", userSchema);
+export const UserModel = mongoose.model<IUser>('User', UserSchema);

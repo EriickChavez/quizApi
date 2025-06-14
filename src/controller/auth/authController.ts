@@ -1,9 +1,63 @@
-import { Request, Response } from "express";
-import { authServiceInstance } from "../../services/instances/authServiceInstance";
+import { Request, Response, NextFunction } from "express";
 import { sendResponse } from "../../utils/apiResponse";
-import logger from "../../middleware/logger";
-import { ERROR_CODES } from "../../enums/error";
+import { UserService } from "../../services/user/userService";
+import { userServiceInstance } from "../../services/instances/userServiceInstance";
+import { comparePassword, hashPassword } from "../../config/auth";
+import { authServiceInstance } from "../../services/instances/authServiceInstance";
 
+interface AuthRequest extends Request {
+  body: {
+    name: string;
+    email: string;
+    password: string;
+  };
+}
+
+export const register = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { name, email, password } = req.body;
+
+    const hashedPassword = await hashPassword(password);
+
+    const newUser = await userServiceInstance.registerUser({
+      name,
+      email,
+      passwordHash: hashedPassword,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    });
+
+    const token = authServiceInstance.generateToken({ id: newUser._id, email: newUser.email });
+
+    sendResponse(res, 201, 'Usuario creado exitosamente', { user: newUser, token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const login = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email, password } = req.body as { email: string; password: string };
+
+    const user = await userServiceInstance.getUserByEmail(email);
+
+    if (!user || !(await comparePassword(password, user.passwordHash))) {
+      throw new Error('Credenciales inválidas');
+    }
+
+    const token = authServiceInstance.generateToken({ id: user._id, email: user.email });
+
+    sendResponse(res, 200, 'Login exitoso', { token });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/*
 export const signup = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
@@ -59,3 +113,4 @@ export const resetPassword = async (req: Request, res: Response) => {
     });
   }
 };
+*/

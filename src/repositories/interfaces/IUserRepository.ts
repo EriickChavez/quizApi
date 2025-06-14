@@ -1,22 +1,11 @@
-import { Document } from "mongoose";
-
-export interface IUser {
-  id: string;
-  email: string;
-  password: string;
-  resetPasswordToken?: string;
-  resetPasswordExpires?: Date;
-}
-
-// @ts-ignore
-export interface IUserDocument extends IUser, Document {}
+import { IUser } from "../../interfaces/IUser";
 
 export interface IUserRepository {
-  createUser(user: IUser): Promise<IUserDocument>;
-  findUserByEmail(email: string): Promise<IUserDocument | null>;
+  createUser(user: IUser): Promise<IUser>;
+  getUserByEmail(email: string): Promise<IUser | null>;
   updateUserById(
     id: string,
     updates: Partial<IUser>
-  ): Promise<IUserDocument | null>;
-  findUserByResetToken(token: string): Promise<IUserDocument | null>;
+  ): Promise<IUser | null>;
+  findUserByResetToken(token: string): Promise<IUser | null>;
 }

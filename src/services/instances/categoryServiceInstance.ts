@@ -1,8 +1,4 @@
-import { LocalCategoryRepository } from "../../repositories/categoryLocalRepository";
+import { CategoryMongoRepository } from "../../repositories/mongodb/categoryMongoRepository";
 import { CategoryService } from "../category/categoryService";
 
-// Crear una instancia del repositorio
-const categoryRepository = new LocalCategoryRepository();
-
-// Crear una instancia de QuestionService con el repositorio inyectado
-export const categoryServiceInstance = new CategoryService(categoryRepository);
+export const categoryServiceInstance = new CategoryService(new CategoryMongoRepository());
