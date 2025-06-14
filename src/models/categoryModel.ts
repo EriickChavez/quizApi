@@ -1,13 +1,11 @@
-import mongoose from "mongoose";
-import { ICategoryDocument } from "../repositories/interfaces/ICategoryRepository";
+import mongoose from 'mongoose';
+import { ICategory } from '../interfaces/ICategory';
 
-export const categorySchema = new mongoose.Schema<ICategoryDocument>({
-  id: { type: String, required: true },
+
+const CategorySchema = new mongoose.Schema<ICategory>({
+  id: String,
   category: { type: String, required: true },
-  icon: { type: String, required: false }, // Agregando el campo icon como opcional
+  icon: String
 });
 
-export const CategorySchema = mongoose.model<ICategoryDocument>(
-  "Category",
-  categorySchema
-);
+export const CategoryModel = mongoose.model<ICategory>('Category', CategorySchema);

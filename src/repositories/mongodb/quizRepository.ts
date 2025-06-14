@@ -8,7 +8,7 @@ export class QuizMongoRepository implements IQuizRepository {
     const newQuiz = new QuizModel(quizData);
     return await newQuiz.save();
   }
-  createMultiQuiz(quizzes: IQuiz[]): Promise<IQuiz[]> {
+  createMultiQuiz(quizes: IQuiz[]): Promise<IQuiz[]> {
     throw new Error('Method not implemented.');
   }
   findQuizById(id: string): Promise<IQuiz | null> {
@@ -20,13 +20,13 @@ export class QuizMongoRepository implements IQuizRepository {
   deleteQuizById(id: string): Promise<boolean | null> {
     throw new Error('Method not implemented.');
   }
-  getQuizzesByCategory(paginationOptions: PaginationOptions, category: string): Promise<IQuiz[]> {
+  getQuizesByCategory(paginationOptions: PaginationOptions, category: string): Promise<IQuiz[]> {
     throw new Error('Method not implemented.');
   }
-  getQuizzesByFilter(params: QuizGetWithParams, paginationOptions: PaginationOptions): Promise<Omit<PaginatedApiResponse, 'res' | 'message' | 'success' | 'error'>> {
+  getQuizesByFilter(params: QuizGetWithParams, paginationOptions: PaginationOptions): Promise<Omit<PaginatedApiResponse, 'res' | 'message' | 'success' | 'error'>> {
     throw new Error('Method not implemented.');
   }
-  async getQuizzes(
+  async getQuizes(
     filters: Partial<{ category: string; difficulty: string; mode: string }>,
     pagination: PaginationOptions,
     random: boolean = false,
@@ -46,7 +46,6 @@ export class QuizMongoRepository implements IQuizRepository {
       matchStage['question.type'] = filters.mode;
     }
 
-    // Excluir preguntas ya respondidas
     if (excludeIds.length > 0) {
       matchStage['question.id'] = { $nin: excludeIds };
     }
@@ -66,18 +65,18 @@ export class QuizMongoRepository implements IQuizRepository {
       );
     }
 
-    const quizzes = await QuizModel.aggregate(pipeline);
+    const quizes = await QuizModel.aggregate(pipeline);
     const countPipeline = [...pipeline, { $count: 'total' }];
     const countResult = await QuizModel.aggregate(countPipeline);
 
     const total = countResult.length ? countResult[0].total : 0;
 
     return {
-      data: quizzes,
+      data: quizes,
       page: random ? 1 : pagination.page,
       limit: pagination.limit,
       total,
-      message: 'Quizzes retrieved successfully',
+      message: 'Quizes retrieved successfully',
       success: true,
       error: null,
     };

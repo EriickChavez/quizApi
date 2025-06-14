@@ -31,7 +31,7 @@ export const register = async (
       updatedAt: new Date()
     });
 
-    const token = authServiceInstance.generateToken({ id: newUser._id, email: newUser.email });
+    const token = authServiceInstance.generateAuthToken({ id: newUser._id, email: newUser.email });
 
     sendResponse(res, 201, 'Usuario creado exitosamente', { user: newUser, token });
   } catch (error) {
@@ -49,7 +49,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       throw new Error('Credenciales inválidas');
     }
 
-    const token = authServiceInstance.generateToken({ id: user._id, email: user.email });
+    const token = authServiceInstance.generateAuthToken({ id: user._id, email: user.email });
 
     sendResponse(res, 200, 'Login exitoso', { token });
   } catch (error) {

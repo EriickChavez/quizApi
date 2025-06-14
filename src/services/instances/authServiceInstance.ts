@@ -7,6 +7,6 @@
 // // Crear una instancia de AuthService con el repositorio inyectado
 // export const authServiceInstance = new AuthService(userRepository);
 
-import { AuthService } from "../auth/authService";
+import AuthService from "../auth/authService";
 
 export const authServiceInstance = new AuthService();

@@ -8,7 +8,6 @@ const AnswerSchema = Joi.object({
 });
 
 const QuestionSchema = Joi.object({
-    id: Joi.string().required(),
     text: Joi.string().required(),
     type: Joi.string().valid('text', 'image').required()
 });
@@ -19,7 +18,7 @@ const OptionsSchema = Joi.object({
 
 const CategorySchema = Joi.object({
     id: Joi.string().required(),
-    category: Joi.string().required(),
+    category: Joi.string().optional(),
     icon: Joi.string().optional()
 });
 

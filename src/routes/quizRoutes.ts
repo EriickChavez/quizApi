@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { createQuiz, getQuizzes } from "../controller/quiz/quizController";
+import { createQuiz, getQuizes } from "../controller/quiz/quizController";
 
 const router = Router();
 
-const questionRoutes = (app: Router) => {
-  app.use("/question", router);
+const quizRoutes = (app: Router) => {
+  app.use("/quiz", router);
 
-  router.get('/get', getQuizzes);
+  router.get('/get', getQuizes);
   router.post('/create', createQuiz);
 
   // router.post("/create", createQuestion);
@@ -19,4 +19,4 @@ const questionRoutes = (app: Router) => {
   // router.get("/get/category/:id", getQuestionsByCategory);
 };
 
-export default questionRoutes;
+export default quizRoutes;

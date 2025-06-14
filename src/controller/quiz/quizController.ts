@@ -39,7 +39,7 @@ interface ICreateQuizRequest extends Request {
 }
 
 
-export const getQuizzes = async (req: Request, res: Response, next: NextFunction) => {
+export const getQuizes = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const {
       category,
@@ -61,7 +61,7 @@ export const getQuizzes = async (req: Request, res: Response, next: NextFunction
     const limit = parseInt(req.query.limit as string) || 10;
     const isRandom = random === 'true';
 
-    const result = await quizServiceInstance.getQuizzes(
+    const result = await quizServiceInstance.getQuizes(
       { category, difficulty, mode },
       { page, limit },
       isRandom,
@@ -71,7 +71,7 @@ export const getQuizzes = async (req: Request, res: Response, next: NextFunction
     return sendPaginatedResponse(
       res,
       200,
-      'Quizzes obtenidos correctamente',
+      'Quizes obtenidos correctamente',
       result.data,
       result.page,
       result.limit,
@@ -91,12 +91,14 @@ export const createQuiz = async (
     const quizData = req.body;
     const { error } = CreateQuizSchema.validate(req.body);
     if (error) {
+      console.log('Error: ->', error);
       throw new ValidationError(error.details[0].message);
     }
     const createdQuiz = await quizServiceInstance.createQuiz(quizData as unknown as IQuiz);
-
+    console.log({ createdQuiz });
     sendResponse(res, 201, 'Quiz creado exitosamente', createdQuiz);
   } catch (error) {
+    console.log('SOY EL DE ERROR ->', error);
     next(error);
   }
 };

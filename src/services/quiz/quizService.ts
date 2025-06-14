@@ -5,13 +5,13 @@ import { IQuiz } from '../../interfaces/IQuiz';
 export class QuizService {
   constructor(private quizRepository: IQuizRepository) { }
 
-  async getQuizzes(
+  async getQuizes(
     filters: Partial<{ category: string; difficulty: string; mode: string }>,
     pagination: PaginationOptions,
     random: boolean = false,
     excludeIds: string[] = []
   ) {
-    return this.quizRepository.getQuizzes(filters, pagination, random, excludeIds);
+    return this.quizRepository.getQuizes(filters, pagination, random, excludeIds);
   }
 
   async createQuiz(quizData: Omit<IQuiz, '_id'>): Promise<IQuiz> {
