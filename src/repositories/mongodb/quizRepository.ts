@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 export class QuizMongoRepository implements IQuizRepository {
   async createQuiz(quizData: IQuiz): Promise<IQuiz> {
     const quizToSave: IQuiz = {
-      id: quizData.id || `${uuid()}`,
+      id: `${uuid()}`,
       answers: quizData.answers,
       category: quizData.category,
       createdAt: new Date(),
@@ -21,6 +21,19 @@ export class QuizMongoRepository implements IQuizRepository {
     return quizToSave;
   }
 
+  async createMultiQuiz(quizData: IQuiz[]): Promise<IQuiz[]> {
+    const quizzesToSave = quizData.map(quiz => ({
+      id: `${uuid()}`,
+      answers: quiz.answers,
+      category: quiz.category,
+      createdAt: new Date(),
+      options: quiz.options,
+      question: quiz.question
+    }));
+
+    const createdQuizzes = await QuizModel.insertMany(quizzesToSave);
+    return createdQuizzes;
+  }
   async getQuizes(
     filters: Partial<{ category: string; difficulty: string; mode: string }>,
     pagination: PaginationOptions,

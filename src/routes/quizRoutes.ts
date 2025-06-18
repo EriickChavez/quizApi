@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createQuiz, deleteQuiz, getQuizes, updateQuiz } from "../controller/quiz/quizController";
+import { createMultiQuiz, createQuiz, deleteQuiz, getQuizes, updateQuiz } from "../controller/quiz/quizController";
 
 
 const router = Router();
@@ -9,6 +9,7 @@ const quizRoutes = (app: Router) => {
 
   router.get('/getAll', getQuizes);
   router.post('/create', createQuiz);
+  router.post('/createMulti', createMultiQuiz);
   router.put('/update/:id', updateQuiz);
   router.delete('/delete/:id', deleteQuiz)
 };

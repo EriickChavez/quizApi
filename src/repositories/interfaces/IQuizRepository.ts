@@ -3,6 +3,7 @@ import { PaginatedApiResponse, PaginationOptions, QuizGetWithParams } from "../.
 
 export interface IQuizRepository {
   createQuiz(quiz: IQuiz): Promise<IQuiz>;
+  createMultiQuiz(quizData: IQuiz[]): Promise<IQuiz[]>;
   updateQuiz(
     id: string,
     updates: Partial<IQuiz>

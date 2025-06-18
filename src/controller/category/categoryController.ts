@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { sendResponse } from "../../utils/apiResponse";
 import { categoryServiceInstance } from "../../services/instances/categoryServiceInstance";
+import { ICategory } from "../../interfaces/ICategory";
 
 interface CreateCategoryRequest extends Request {
   body: {
@@ -52,6 +53,21 @@ export const createCategory = async (
     const createdCategory = await categoryServiceInstance.createCategory(categoryData);
 
     sendResponse(res, 201, 'Categoría creada exitosamente', createdCategory);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createMultiCategory = async (
+  req: CreateCategoryRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const categoriesData = req.body;
+    const createdCategories = await categoryServiceInstance.createMultiCategory(categoriesData as unknown as ICategory[]);
+
+    sendResponse(res, 201, 'Categorías creadas exitosamente', createdCategories);
   } catch (error) {
     next(error);
   }

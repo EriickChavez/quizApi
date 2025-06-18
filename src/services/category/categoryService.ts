@@ -23,4 +23,8 @@ export class CategoryService {
   async deleteCategory(id: string): Promise<boolean> {
     return await this.categoryRepository.deleteCategory(id);
   }
+
+  async createMultiCategory(categories: Omit<ICategory, 'id'>[]): Promise<ICategory[]> {
+    return await this.categoryRepository.createMultiCategory(categories);
+  }
 }

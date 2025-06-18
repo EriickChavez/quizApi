@@ -39,4 +39,15 @@ export class CategoryMongoRepository implements ICategoryRepository {
         const deletedItem = await CategoryModel.deleteOne({ id });
         return deletedItem.deletedCount > 0;
     }
+
+    async createMultiCategory(categories: Omit<ICategory, 'id'>[]): Promise<ICategory[]> {
+        const categoriesToSave = categories.map(category => ({
+            id: `${uuid()}`,
+            category: category.category,
+            icon: category.icon
+        }));
+
+        const createdCategories = await CategoryModel.insertMany(categoriesToSave);
+        return createdCategories;
+    }
 }

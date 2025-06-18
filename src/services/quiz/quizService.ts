@@ -17,7 +17,9 @@ export class QuizService {
   async createQuiz(quizData: IQuiz): Promise<IQuiz> {
     return this.quizRepository.createQuiz(quizData);
   }
-
+  async createMultiQuiz(quizData: IQuiz[]): Promise<IQuiz[]> {
+    return this.quizRepository.createMultiQuiz(quizData);
+  }
   async updateQuiz(id: string, quizData: Partial<IQuiz>): Promise<IQuiz | null> {
     return this.quizRepository.updateQuiz(id, quizData);
   }

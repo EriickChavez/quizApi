@@ -102,6 +102,21 @@ export const createQuiz = async (
   }
 };
 
+export const createMultiQuiz = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const quizData = req.body;
+    const createdQuizzes = await quizServiceInstance.createMultiQuiz(quizData);
+    sendResponse(res, 201, 'Quizes creados exitosamente', createdQuizzes);
+  } catch (error) {
+    console.log('Error: ->', error);
+    next(error);
+  }
+};
+
 export const updateQuiz = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const quizId = req.params.id;
