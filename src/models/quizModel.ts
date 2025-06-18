@@ -10,7 +10,7 @@ const AnswerSchema = new mongoose.Schema({
 
 const QuestionSchema = new mongoose.Schema({
   id: String,
-  text: String,
+  question: String,
   type: String,
 });
 
@@ -25,6 +25,7 @@ const CategorySchema = new mongoose.Schema({
 });
 
 const QuizSchema = new mongoose.Schema<IQuiz>({
+  id: String,
   category: [CategorySchema],
   question: QuestionSchema,
   answers: [AnswerSchema],

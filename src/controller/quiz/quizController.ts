@@ -15,6 +15,7 @@ import { answerHistoryServiceInstance } from "../../services/instances/answerHis
 import { IQuiz } from "../../interfaces/IQuiz";
 import { CreateQuizSchema } from "../../validations/quiz.validation";
 import { ValidationError } from "../../exceptions/ValidationError";
+import { QUESTION_DIFFICULTY, QUESTION_TYPES } from "../../enums/questions";
 interface ICreateQuizRequest extends Request {
   body: {
     category: Array<{
@@ -23,17 +24,17 @@ interface ICreateQuizRequest extends Request {
       icon?: string;
     }>;
     question: {
-      text: string;
-      type: 'text' | 'image';
+      question: string;
+      type: QUESTION_TYPES;
     };
     answers: Array<{
       id: string;
       answer: string;
       isCorrect: boolean;
-      type: 'text' | 'image';
+      type: QUESTION_TYPES;
     }>;
     options: {
-      difficulty: 'easy' | 'medium' | 'hard';
+      difficulty: QUESTION_DIFFICULTY;
     };
   };
 }
@@ -89,183 +90,37 @@ export const createQuiz = async (
 ) => {
   try {
     const quizData = req.body;
-    const { error } = CreateQuizSchema.validate(req.body);
-    if (error) {
-      console.log('Error: ->', error);
-      throw new ValidationError(error.details[0].message);
-    }
+    // const { error } = CreateQuizSchema.validate(req.body);
+    // if (error) {
+    //   console.log('Error: ->', error);
+    //   throw new ValidationError(error.details[0].message);
+    // }
     const createdQuiz = await quizServiceInstance.createQuiz(quizData as unknown as IQuiz);
-    console.log({ createdQuiz });
     sendResponse(res, 201, 'Quiz creado exitosamente', createdQuiz);
   } catch (error) {
-    console.log('SOY EL DE ERROR ->', error);
     next(error);
   }
 };
 
-// export const createQuestion = async (req: Request, res: Response) => {
-//   try {
-//     const question = await quizServiceInstance.createQuestion(req.body);
-//     sendResponse(res, 201, "Question created successfully", question);
-//   } catch (error: any) {
-//     sendResponse(res, 400, error.message, null, {
-//       code: "AUTH_001",
-//       details: error.message,
-//     });
-//   }
-// };
-// export const createMultiQuestion = async (req: Request, res: Response) => {
-//   try {
-//     const questions = await quizServiceInstance.createMultiQuestion(
-//       req.body
-//     );
-//     sendResponse(res, 201, "Questions created successfully", questions);
-//   } catch (error: any) {
-//     sendResponse(res, 400, error.message, null, {
-//       code: "AUTH_001",
-//       details: error.message,
-//     });
-//   }
-// };
+export const updateQuiz = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const quizId = req.params.id;
+    const quizData = req.body;
+    const updatedQuiz = await quizServiceInstance.updateQuiz(quizId, quizData);
+    sendResponse(res, 200, 'Quiz actualizado exitosamente', updatedQuiz);
+  } catch (error) {
+    console.log('Error: ->', error);
+    next(error);
+  }
+};
 
-// export const getQuestions = async (req: Request, res: Response) => {
-//   try {
-//     const paginationOptions: PaginationOptions = {
-//       page:
-//         typeof req.query.page === "string"
-//           ? parseInt(req.query.page)
-//           : PAGINATED_QUIZ_PAGE,
-//       limit:
-//         typeof req.query.limit === "string"
-//           ? parseInt(req.query.limit)
-//           : PAGINATED_QUIZ_LIMIT,
-//     };
-//     const { limit, page, total, data } =
-//       await quizServiceInstance.getQuestions(paginationOptions);
-//     sendPaginatedResponse(
-//       res,
-//       200,
-//       "Questions retrieved successfully",
-//       data,
-//       page,
-//       limit,
-//       total
-//     );
-//   } catch (error: any) {
-//     sendResponse(res, 400, error.message, null, {
-//       code: "AUTH_002",
-//       details: error.message,
-//     });
-//   }
-// };
-
-// export const getQuestionById = async (req: Request, res: Response) => {
-//   try {
-//     const question = await quizServiceInstance.getQuestionById(
-//       req.params.id
-//     );
-//     sendResponse(res, 200, "Question retrieved successfully", question);
-//   } catch (error: any) {
-//     sendResponse(res, 400, error.message, null, {
-//       code: "AUTH_003",
-//       details: error.message,
-//     });
-//   }
-// };
-
-// export const updateQuestion = async (req: Request, res: Response) => {
-//   try {
-//     const question = await quizServiceInstance.updateQuestion(
-//       req.params.id,
-//       req.body
-//     );
-//     sendResponse(res, 200, "Question updated successfully", question);
-//   } catch (error: any) {
-//     sendResponse(res, 400, error.message, null, {
-//       code: "AUTH_004",
-//       details: error.message,
-//     });
-//   }
-// };
-
-// export const deleteQuestion = async (req: Request, res: Response) => {
-//   try {
-//     const question = await quizServiceInstance.deleteQuestion(
-//       req.params.id
-//     );
-//     sendResponse(res, 200, "Question deleted successfully", question);
-//   } catch (error: any) {
-//     sendResponse(res, 400, error.message, null, {
-//       code: "AUTH_005",
-//       details: error.message,
-//     });
-//   }
-// };
-
-// export const getQuestionsByCategory = async (req: Request, res: Response) => {
-//   try {
-//     const paginationOptions: PaginationOptions = {
-//       page:
-//         typeof req.query.page === "string"
-//           ? parseInt(req.query.page)
-//           : PAGINATED_QUIZ_PAGE,
-//       limit:
-//         typeof req.query.limit === "string"
-//           ? parseInt(req.query.limit)
-//           : PAGINATED_QUIZ_LIMIT,
-//     };
-//     console.log(req.params);
-//     const questions = await quizServiceInstance.getQuestionsByCategory(
-//       paginationOptions,
-//       req.params.id
-//     );
-//     sendResponse(res, 200, "Questions retrieved successfully", questions);
-//   } catch (error: any) {
-//     sendResponse(res, 400, error.message, null, {
-//       code: "AUTH_006",
-//       details: error.message,
-//     });
-//   }
-// };
-
-// export const getQuestionsByFilter = async (req: Request, res: Response) => {
-//   try {
-//     const { category, mode, difficulty } = req.query
-//     const paginationOptions: PaginationOptions = {
-//       page:
-//         typeof req.query.page === "string"
-//           ? parseInt(req.query.page)
-//           : PAGINATED_QUIZ_PAGE,
-//       limit:
-//         typeof req.query.limit === "string"
-//           ? parseInt(req.query.limit)
-//           : PAGINATED_QUIZ_LIMIT,
-//     };
-//     const params: QuizGetWithParams = {}
-
-//     if (category) params.category = category as string
-//     if (mode) params.mode = mode as string
-//     if (difficulty) params.difficulty = difficulty as string
-
-//     console.log({ query: req.query })
-
-//     const { limit, page, total, data } =
-//       await quizServiceInstance.getQuestionsByFilter(params, paginationOptions);
-
-//     sendPaginatedResponse(
-//       res,
-//       200,
-//       "Questions retrieved successfully",
-//       data,
-//       page,
-//       limit,
-//       total
-//     );
-
-//   } catch (error: any) {
-//     sendResponse(res, 400, error.message, null, {
-//       code: "AUTH_002",
-//       details: error.message,
-//     });
-//   }
-// }
+export const deleteQuiz = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const quizId = req.params.id;
+    const deletedQuiz = await quizServiceInstance.deleteQuiz(quizId);
+    sendResponse(res, 200, 'Quiz eliminado exitosamente', deletedQuiz);
+  } catch (error) {
+    console.log('Error: ->', error);
+    next(error);
+  }
+}

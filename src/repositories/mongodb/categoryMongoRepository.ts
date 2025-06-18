@@ -25,4 +25,18 @@ export class CategoryMongoRepository implements ICategoryRepository {
 
         return categoryToSave;
     }
+    async update(id: string, categoryData: Omit<ICategory, 'id'>): Promise<ICategory | null> {
+        const updatedCategory = await CategoryModel.findOneAndUpdate(
+            { id },
+            { category: categoryData.category, icon: categoryData.icon },
+            { new: true }
+        );
+
+        return updatedCategory;
+    }
+
+    async deleteCategory(id: string): Promise<boolean> {
+        const deletedItem = await CategoryModel.deleteOne({ id });
+        return deletedItem.deletedCount > 0;
+    }
 }

@@ -14,7 +14,15 @@ export class QuizService {
     return this.quizRepository.getQuizes(filters, pagination, random, excludeIds);
   }
 
-  async createQuiz(quizData: Omit<IQuiz, '_id'>): Promise<IQuiz> {
+  async createQuiz(quizData: IQuiz): Promise<IQuiz> {
     return this.quizRepository.createQuiz(quizData);
+  }
+
+  async updateQuiz(id: string, quizData: Partial<IQuiz>): Promise<IQuiz | null> {
+    return this.quizRepository.updateQuiz(id, quizData);
+  }
+
+  async deleteQuiz(id: string): Promise<boolean | null> {
+    return this.quizRepository.deleteQuiz(id);
   }
 }

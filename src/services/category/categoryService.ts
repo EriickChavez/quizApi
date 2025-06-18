@@ -15,4 +15,12 @@ export class CategoryService {
   async createCategory(categoryData: Omit<ICategory, 'id'> & { id?: string }): Promise<ICategory> {
     return await this.categoryRepository.create(categoryData);
   }
+
+  async updateCategory(id: string, categoryData: Omit<ICategory, 'id'>): Promise<ICategory | null> {
+    return await this.categoryRepository.update(id, categoryData);
+  }
+
+  async deleteCategory(id: string): Promise<boolean> {
+    return await this.categoryRepository.deleteCategory(id);
+  }
 }

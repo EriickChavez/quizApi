@@ -2,30 +2,25 @@ import { PaginatedApiResponse, PaginationOptions, QuizGetWithParams } from '../.
 import { IQuiz } from '../../interfaces/IQuiz';
 import { IQuizRepository } from '../interfaces/IQuizRepository';
 import { QuizModel } from '../../models/quizModel';
+import { v4 as uuid } from 'uuid';
 
 export class QuizMongoRepository implements IQuizRepository {
-  async createQuiz(quizData: Omit<IQuiz, '_id'>): Promise<IQuiz> {
-    const newQuiz = new QuizModel(quizData);
-    return await newQuiz.save();
+  async createQuiz(quizData: IQuiz): Promise<IQuiz> {
+    const quizToSave: IQuiz = {
+      id: quizData.id || `${uuid()}`,
+      answers: quizData.answers,
+      category: quizData.category,
+      createdAt: new Date(),
+      options: quizData.options,
+      question: quizData.question
+    };
+
+    const quizDoc = new QuizModel(quizToSave);
+    await quizDoc.save();
+
+    return quizToSave;
   }
-  createMultiQuiz(quizes: IQuiz[]): Promise<IQuiz[]> {
-    throw new Error('Method not implemented.');
-  }
-  findQuizById(id: string): Promise<IQuiz | null> {
-    throw new Error('Method not implemented.');
-  }
-  updateQuizById(id: string, updates: Partial<IQuiz>): Promise<IQuiz | null> {
-    throw new Error('Method not implemented.');
-  }
-  deleteQuizById(id: string): Promise<boolean | null> {
-    throw new Error('Method not implemented.');
-  }
-  getQuizesByCategory(paginationOptions: PaginationOptions, category: string): Promise<IQuiz[]> {
-    throw new Error('Method not implemented.');
-  }
-  getQuizesByFilter(params: QuizGetWithParams, paginationOptions: PaginationOptions): Promise<Omit<PaginatedApiResponse, 'res' | 'message' | 'success' | 'error'>> {
-    throw new Error('Method not implemented.');
-  }
+
   async getQuizes(
     filters: Partial<{ category: string; difficulty: string; mode: string }>,
     pagination: PaginationOptions,
@@ -80,5 +75,20 @@ export class QuizMongoRepository implements IQuizRepository {
       success: true,
       error: null,
     };
+  }
+
+  async updateQuiz(id: string, quizData: Partial<IQuiz>): Promise<IQuiz | null> {
+    const updatedQuiz = await QuizModel.findOneAndUpdate(
+      { id },
+      { ...quizData },
+      { new: true }
+    );
+
+    return updatedQuiz;
+  }
+
+  async deleteQuiz(id: string): Promise<boolean | null> {
+    const deletedItem = await QuizModel.deleteOne({ id });
+    return deletedItem.deletedCount > 0;
   }
 }

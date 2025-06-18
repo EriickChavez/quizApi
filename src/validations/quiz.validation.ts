@@ -1,22 +1,24 @@
 import Joi from 'joi';
+import { QUESTION_DIFFICULTY, QUESTION_TYPES } from '../enums/questions';
 
 const AnswerSchema = Joi.object({
     id: Joi.string().required(),
     answer: Joi.string().required(),
     isCorrect: Joi.boolean().required(),
-    type: Joi.string().valid('text', 'image').required()
+    type: Joi.string().valid(QUESTION_TYPES).required()
 });
 
 const QuestionSchema = Joi.object({
-    text: Joi.string().required(),
-    type: Joi.string().valid('text', 'image').required()
+    question: Joi.string().required(),
+    type: Joi.string().valid(QUESTION_TYPES).required()
 });
 
 const OptionsSchema = Joi.object({
-    difficulty: Joi.string().valid('easy', 'medium', 'hard').required()
+    difficulty: Joi.string().valid(QUESTION_DIFFICULTY).required()
 });
 
 const CategorySchema = Joi.object({
+    _id: Joi.string().required(),
     id: Joi.string().required(),
     category: Joi.string().optional(),
     icon: Joi.string().optional()
