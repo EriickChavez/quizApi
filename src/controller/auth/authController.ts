@@ -1,25 +1,49 @@
 import { Request, Response, NextFunction } from "express";
 import { sendResponse } from "../../utils/apiResponse";
-import { UserService } from "../../services/user/userService";
 import { userServiceInstance } from "../../services/instances/userServiceInstance";
-import { comparePassword, hashPassword } from "../../config/auth";
+import { hashPassword } from "../../config/auth";
 import { authServiceInstance } from "../../services/instances/authServiceInstance";
+import { USER_ROLES } from "../../enums/roles";
 
-interface AuthRequest extends Request {
+interface RegisterRequest extends Request {
   body: {
     name: string;
+    email: string;
+    password: string;
+    role?: USER_ROLES; // Opcional, por defecto será STUDENT
+  };
+}
+
+interface LoginRequest extends Request {
+  body: {
     email: string;
     password: string;
   };
 }
 
+/**
+ * Registro de usuario con rol
+ */
 export const register = async (
-  req: AuthRequest,
+  req: RegisterRequest,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
+
+    // Validar que el rol sea válido si se proporciona
+    const userRole = role && Object.values(USER_ROLES).includes(role) 
+      ? role 
+      : USER_ROLES.STUDENT;
+
+    // Solo los admins pueden crear usuarios con roles admin o moderator
+    if ((role === USER_ROLES.ADMIN || role === USER_ROLES.MODERATOR) && req.user?.role !== USER_ROLES.ADMIN) {
+      return sendResponse(res, 403, 'Insufficient permissions to create user with this role', null, {
+        code: 'INSUFFICIENT_PERMISSIONS',
+        details: 'Only administrators can create admin or moderator accounts'
+      });
+    }
 
     const hashedPassword = await hashPassword(password);
 
@@ -27,31 +51,116 @@ export const register = async (
       name,
       email,
       passwordHash: hashedPassword,
+      role: userRole,
+      isActive: true,
       createdAt: new Date(),
       updatedAt: new Date()
     });
 
-    const token = authServiceInstance.generateAuthToken({ id: newUser._id, email: newUser.email });
+    const token = authServiceInstance.generateAuthToken({ 
+      id: newUser._id?.toString() || '', 
+      email: newUser.email,
+      role: newUser.role
+    });
 
-    sendResponse(res, 201, 'Usuario creado exitosamente', { user: newUser, token });
-  } catch (error) {
+    // Usar el método toSafeObject si está disponible
+    const safeUser = newUser.toSafeObject ? newUser.toSafeObject() : {
+      _id: newUser._id,
+      name: newUser.name,
+      email: newUser.email,
+      role: newUser.role,
+      isActive: newUser.isActive,
+      createdAt: newUser.createdAt,
+      updatedAt: newUser.updatedAt
+    };
+
+    sendResponse(res, 201, 'User registered successfully', { 
+      user: safeUser, 
+      token 
+    });
+  } catch (error: any) {
+    if (error.code === 11000) {
+      return sendResponse(res, 400, 'Email already exists', null, {
+        code: 'DUPLICATE_EMAIL',
+        details: 'A user with this email already exists'
+      });
+    }
     next(error);
   }
 };
 
-export const login = async (req: Request, res: Response, next: NextFunction) => {
+/**
+ * Login de usuario
+ */
+export const login = async (
+  req: LoginRequest, 
+  res: Response, 
+  next: NextFunction
+) => {
   try {
-    const { email, password } = req.body as { email: string; password: string };
+    const { email, password } = req.body;
 
-    const user = await userServiceInstance.getUserByEmail(email);
+    const result = await authServiceInstance.login(email, password);
 
-    if (!user || !(await comparePassword(password, user.passwordHash))) {
-      throw new Error('Credenciales inválidas');
+    sendResponse(res, 200, 'Login successful', result);
+  } catch (error: any) {
+    if (error.message === 'Invalid credentials') {
+      return sendResponse(res, 401, 'Invalid credentials', null, {
+        code: 'INVALID_CREDENTIALS',
+        details: 'Email or password is incorrect'
+      });
     }
 
-    const token = authServiceInstance.generateAuthToken({ id: user._id, email: user.email });
+    if (error.message === 'Account is deactivated') {
+      return sendResponse(res, 401, 'Account deactivated', null, {
+        code: 'ACCOUNT_DEACTIVATED',
+        details: 'This account has been deactivated'
+      });
+    }
 
-    sendResponse(res, 200, 'Login exitoso', { token });
+    next(error);
+  }
+};
+
+/**
+ * Obtener información del usuario autenticado
+ */
+export const getMe = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return sendResponse(res, 401, 'Authentication required', null, {
+        code: 'AUTH_REQUIRED',
+        details: 'User must be authenticated'
+      });
+    }
+
+    const user = await userServiceInstance.getUserById(userId);
+
+    if (!user) {
+      return sendResponse(res, 404, 'User not found', null, {
+        code: 'USER_NOT_FOUND',
+        details: 'User not found'
+      });
+    }
+
+    const safeUser = user.toSafeObject ? user.toSafeObject() : {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isActive: user.isActive,
+      avatar: user.avatar,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
+
+    sendResponse(res, 200, 'User information retrieved', safeUser);
   } catch (error) {
     next(error);
   }

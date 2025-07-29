@@ -1,13 +1,52 @@
 import mongoose from 'mongoose';
-import { IUser } from '../interfaces/IUser';
+import { IUserDocument } from '../interfaces/IUser';
+import { USER_ROLES } from '../enums/roles';
 
-const UserSchema = new mongoose.Schema<IUser>({
-  name: String,
-  email: { type: String, unique: true },
-  passwordHash: String,
-  avatar: String,
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+const UserSchema = new mongoose.Schema<IUserDocument>({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true
+  },
+  passwordHash: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    enum: Object.values(USER_ROLES),
+    default: USER_ROLES.STUDENT,
+    required: true
+  },
+  avatar: {
+    type: String,
+    default: null
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
+}, {
+  timestamps: true // Esto crea automáticamente createdAt y updatedAt
 });
 
-export const UserModel = mongoose.model<IUser>('User', UserSchema);
+// Índices para mejorar el rendimiento
+UserSchema.index({ email: 1 });
+UserSchema.index({ role: 1 });
+UserSchema.index({ isActive: 1 });
+
+// Método para obtener usuario sin password
+UserSchema.methods.toSafeObject = function() {
+  const userObject = this.toObject();
+  delete userObject.passwordHash;
+  return userObject;
+};
+
+export const UserModel = mongoose.model<IUserDocument>('User', UserSchema);

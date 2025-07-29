@@ -10,7 +10,10 @@
     "clean": "rm -rf dist",
     "dev": "ts-node src/server.ts",
     "deploy": "yarn build && yarn start",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create:admin": "ts-node scripts/createAdminUser.ts",
+    "create:test-users": "ts-node scripts/createAdminUser.ts --test-users",
+    "db:seed": "ts-node scripts/createAdminUser.ts --test-users"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

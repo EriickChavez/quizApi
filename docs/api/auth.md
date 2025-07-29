@@ -20,9 +20,18 @@ Crea una nueva cuenta de usuario en el sistema.
 {
   "name": "string (required)",
   "email": "string (required, valid email)",
-  "password": "string (required, min 6 characters)"
+  "password": "string (required, min 6 characters)",
+  "role": "string (optional)" // student, teacher, moderator, admin
 }
 ```
+
+#### Roles Disponibles
+- `student` - Estudiante (default)
+- `teacher` - Profesor  
+- `moderator` - Moderador
+- `admin` - Administrador
+
+> **Nota**: Solo los administradores pueden crear cuentas con roles `admin` o `moderator`.
 
 #### Ejemplo de Request
 ```bash
@@ -142,6 +151,88 @@ curl -X POST http://localhost:3000/api/auth/login \
   }
 }
 ```
+
+### 3. Obtener Información del Usuario Autenticado
+
+**GET** `/me`
+
+Obtiene la información del usuario autenticado.
+
+#### Headers
+```
+Authorization: Bearer YOUR_JWT_TOKEN
+```
+
+#### Ejemplo de Request
+```bash
+curl -X GET http://localhost:3000/api/auth/me \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+#### Response Exitoso (200)
+```json
+{
+  "success": true,
+  "message": "User information retrieved",
+  "data": {
+    "_id": "65f1a2b3c4d5e6f7g8h9i0j1",
+    "name": "Juan Pérez",
+    "email": "juan@example.com",
+    "role": "student",
+    "isActive": true,
+    "avatar": null,
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-15T10:30:00.000Z"
+  }
+}
+```
+
+### 4. Registro con Roles Específicos
+
+Para crear usuarios con roles específicos, hay endpoints especiales que requieren permisos administrativos:
+
+#### **POST** `/register/admin`
+Crea una cuenta de administrador (solo admins)
+
+#### **POST** `/register/moderator` 
+Crea una cuenta de moderador (solo admins)
+
+#### **POST** `/register/teacher`
+Crea una cuenta de profesor (admins y moderadores)
+
+```bash
+# Ejemplo: Crear un profesor (requiere ser admin o moderador)
+curl -X POST http://localhost:3000/api/auth/register/teacher \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ADMIN_TOKEN" \
+  -d '{
+    "name": "María García",
+    "email": "maria@school.com",
+    "password": "SecurePass123",
+    "role": "teacher"
+  }'
+```
+
+## Sistema de Roles y Permisos
+
+### Jerarquía de Roles
+
+1. **Admin** - Acceso completo al sistema
+2. **Moderator** - Gestión de contenido y usuarios
+3. **Teacher** - Crear y gestionar quizzes
+4. **Student** - Tomar quizzes y ver resultados
+
+### Permisos por Rol
+
+| Permiso | Student | Teacher | Moderator | Admin |
+|---------|---------|---------|-----------|-------|
+| Tomar quizzes | ✅ | ✅ | ✅ | ✅ |
+| Ver resultados propios | ✅ | ✅ | ✅ | ✅ |
+| Crear quizzes | ❌ | ✅ | ✅ | ✅ |
+| Gestionar categorías | ❌ | ✅ | ✅ | ✅ |
+| Ver todos los resultados | ❌ | ❌ | ✅ | ✅ |
+| Gestionar usuarios | ❌ | ❌ | ✅ | ✅ |
+| Panel administrativo | ❌ | ❌ | ❌ | ✅ |
 
 ## Autenticación con JWT
 
